@@ -1,5 +1,5 @@
 ###/cam/add
-POST auth-icu.com:5000/cam/add
+POST https://auth-icu.herokuapp.com/cam/add
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzNzAwMDIyLCJpYXQiOjE2NTM0NDA4MjJ9.Q13za7gdX_uxOi5hJ_lrWICohCb7FHGfgTba3aCiDAwQ67qFuE1opcxBqS37qpf421ecgOO1frx0G6db3BNlNw
 Content-Type: application/json
 
@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ###/room/add
-POST localhost:5000/room/add
+POST https://auth-icu.herokuapp.com/room/add
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzNzAwMDIyLCJpYXQiOjE2NTM0NDA4MjJ9.Q13za7gdX_uxOi5hJ_lrWICohCb7FHGfgTba3aCiDAwQ67qFuE1opcxBqS37qpf421ecgOO1frx0G6db3BNlNw
 Content-Type: application/json
 
@@ -21,7 +21,7 @@ Content-Type: application/json
 
 
 ###/department/add
-POST localhost:5000/department/add
+POST https://auth-icu.herokuapp.com/department/add
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzNzAwMDIyLCJpYXQiOjE2NTM0NDA4MjJ9.Q13za7gdX_uxOi5hJ_lrWICohCb7FHGfgTba3aCiDAwQ67qFuE1opcxBqS37qpf421ecgOO1frx0G6db3BNlNw
 Content-Type: application/json
 
@@ -32,14 +32,14 @@ Content-Type: application/json
 }
 
 ###/branch/add
-POST localhost:5000/branch/add
+POST https://auth-icu.herokuapp.com/branch/add
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzNzAwMDIyLCJpYXQiOjE2NTM0NDA4MjJ9.Q13za7gdX_uxOi5hJ_lrWICohCb7FHGfgTba3aCiDAwQ67qFuE1opcxBqS37qpf421ecgOO1frx0G6db3BNlNw
 Content-Type: application/json
 
 {"name": "branch1","location": "damas"}
 
 ###login
-POST localhost:5000/api/login?username=yrhacker@hotmail.com&password=yassaro
+POST https://auth-icu.herokuapp.com/api/login?username=yrhacker@hotmail.com&password=yassaro
 
 ###register
 POST https://auth-icu.herokuapp.com/registration/register
