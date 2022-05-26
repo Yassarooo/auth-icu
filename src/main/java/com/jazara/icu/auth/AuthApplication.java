@@ -36,13 +36,13 @@ public class AuthApplication implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
 
-        Role uRole = new Role();
+/*        Role uRole = new Role();
         uRole.setName("USER");
         uRole.setDescription("USER Role (Only Manage owned account)");
         roleService.CreateRole(uRole);
         Role aRole = new Role();
         aRole.setName("ADMIN");
         aRole.setDescription("ADMIN Role (Manage users)");
-        roleService.CreateRole(aRole);
+        roleService.CreateRole(aRole);*/
     }
 }
