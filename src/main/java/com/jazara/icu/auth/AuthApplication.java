@@ -15,8 +15,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableZuulProxy
-@EnableHystrix
-@EnableHystrixDashboard
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class},scanBasePackages = "com.jazara.icu.auth")
 @EnableDiscoveryClient
 public class AuthApplication implements CommandLineRunner {
