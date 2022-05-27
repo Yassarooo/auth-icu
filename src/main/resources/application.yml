@@ -6,7 +6,6 @@ spring:
     username: user
     password: password
 
-
 jasypt:
   encryptor:
     password: jazaradebuggers
