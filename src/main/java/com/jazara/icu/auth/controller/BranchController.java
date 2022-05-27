@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping("/branch")
 @RestController
@@ -35,9 +37,11 @@ public class BranchController {
     }
 
     @GetMapping(value = "/user/{id}")
-    public ResponseEntity<ArrayList<Branch>> getBranchesByOwnerId(@PathVariable Long id) {
+    public ResponseEntity<?> getBranchesByOwnerId(@PathVariable Long id) {
+        Map<String, Object> tokenMap = new HashMap<String, Object>();
         final ArrayList<Branch> branches = branchService.getBranchesByOwnerId(id);
-        return new ResponseEntity<ArrayList<Branch>>(branches, HttpStatus.OK);
+        tokenMap.put("branches",branches);
+        return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")

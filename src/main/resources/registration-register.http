@@ -1,3 +1,14 @@
+
+###/branch/user/1
+GET https://auth-icu.herokuapp.com/branch/user/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzOTEwODk0LCJpYXQiOjE2NTM2NTE2OTR9.hthpGXx2Sh6nKzpxB_JzR3_Yb0ZVzEnS0BKyz8zikxhlBUqqMSobRNrvU0qEZT8hR3lgQ5VS7xXEzaHZ_jTSzw
+Content-Type: application/json
+
+###/branch/id
+GET https://auth-icu.herokuapp.com/branch/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzOTEwODk0LCJpYXQiOjE2NTM2NTE2OTR9.hthpGXx2Sh6nKzpxB_JzR3_Yb0ZVzEnS0BKyz8zikxhlBUqqMSobRNrvU0qEZT8hR3lgQ5VS7xXEzaHZ_jTSzw
+Content-Type: application/json
+
 ###/cam/add
 POST https://auth-icu.herokuapp.com/cam/add
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzNzAwMDIyLCJpYXQiOjE2NTM0NDA4MjJ9.Q13za7gdX_uxOi5hJ_lrWICohCb7FHGfgTba3aCiDAwQ67qFuE1opcxBqS37qpf421ecgOO1frx0G6db3BNlNw
@@ -5,38 +16,38 @@ Content-Type: application/json
 
 {
   "name": "cam1room1dep1branch1",
-  "room_id": "2",
+  "room_id": "1",
   "url": "rtsp://185.147.54.2/username=ahmad&password=ahmad"
 }
 
 ###/room/add
 POST https://auth-icu.herokuapp.com/room/add
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzNzAwMDIyLCJpYXQiOjE2NTM0NDA4MjJ9.Q13za7gdX_uxOi5hJ_lrWICohCb7FHGfgTba3aCiDAwQ67qFuE1opcxBqS37qpf421ecgOO1frx0G6db3BNlNw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzOTEwODk0LCJpYXQiOjE2NTM2NTE2OTR9.hthpGXx2Sh6nKzpxB_JzR3_Yb0ZVzEnS0BKyz8zikxhlBUqqMSobRNrvU0qEZT8hR3lgQ5VS7xXEzaHZ_jTSzw
 Content-Type: application/json
 
 {
-  "name": "room1dep2branch7",
-  "dep_id": "2"
+  "name": "room1dep1branch7",
+  "dep_id": "1"
 }
 
 
 ###/department/add
 POST https://auth-icu.herokuapp.com/department/add
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzNzAwMDIyLCJpYXQiOjE2NTM0NDA4MjJ9.Q13za7gdX_uxOi5hJ_lrWICohCb7FHGfgTba3aCiDAwQ67qFuE1opcxBqS37qpf421ecgOO1frx0G6db3BNlNw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzOTEwODk0LCJpYXQiOjE2NTM2NTE2OTR9.hthpGXx2Sh6nKzpxB_JzR3_Yb0ZVzEnS0BKyz8zikxhlBUqqMSobRNrvU0qEZT8hR3lgQ5VS7xXEzaHZ_jTSzw
 Content-Type: application/json
 
 {
     "name": "dep1branch7",
-    "branch_id": "7",
+    "branch_id": "1",
     "location": "damascus"
 }
 
 ###/branch/add
 POST https://auth-icu.herokuapp.com/branch/add
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzNzAwMDIyLCJpYXQiOjE2NTM0NDA4MjJ9.Q13za7gdX_uxOi5hJ_lrWICohCb7FHGfgTba3aCiDAwQ67qFuE1opcxBqS37qpf421ecgOO1frx0G6db3BNlNw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzOTEwODk0LCJpYXQiOjE2NTM2NTE2OTR9.hthpGXx2Sh6nKzpxB_JzR3_Yb0ZVzEnS0BKyz8zikxhlBUqqMSobRNrvU0qEZT8hR3lgQ5VS7xXEzaHZ_jTSzw
 Content-Type: application/json
 
-{"name": "branch1","location": "damas"}
+{"name": "branch3","location": "latakia"}
 
 ###login
 POST https://auth-icu.herokuapp.com/api/login?username=yrhacker@hotmail.com&password=yassaro
@@ -45,13 +56,13 @@ POST https://auth-icu.herokuapp.com/api/login?username=yrhacker@hotmail.com&pass
 POST https://auth-icu.herokuapp.com/registration/register
 Content-Type: application/json
 
-{"name": "yassar","username": "yassarooo", "email": "yrhackeroo@hotmail.com", "gender": "Male","password": "yassaro", "phonenumber": "0992156565", "dob": "1999-07-09" }
+{"name": "yassar","username": "yassaro", "email": "yrhacker@hotmail.com", "gender": "Male","password": "yassaro", "phonenumber": "0992156565", "dob": "1999-07-09" }
 
 ###confirm
 POST https://auth-icu.herokuapp.com/registration/registrationconfirm
 Content-Type: application/x-www-form-urlencoded
 
-token=131254&email=yrhacker@hotmail.com
+token=354096&email=yrhacker@hotmail.com
 
 ###resendEmail
 GET https://auth-icu.herokuapp.com/registration/resendEmail?email=yrhacker@hotmail.com
