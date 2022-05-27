@@ -1,4 +1,9 @@
 
+###/v2/api-docs
+GET https://auth-icu.herokuapp.com/v2/api-docs
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzOTEwODk0LCJpYXQiOjE2NTM2NTE2OTR9.hthpGXx2Sh6nKzpxB_JzR3_Yb0ZVzEnS0BKyz8zikxhlBUqqMSobRNrvU0qEZT8hR3lgQ5VS7xXEzaHZ_jTSzw
+Content-Type: application/json
+
 ###/branch/user/1
 GET https://auth-icu.herokuapp.com/branch/user/1
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5YXNzYXJvIiwiZXhwIjoxNjUzOTEwODk0LCJpYXQiOjE2NTM2NTE2OTR9.hthpGXx2Sh6nKzpxB_JzR3_Yb0ZVzEnS0BKyz8zikxhlBUqqMSobRNrvU0qEZT8hR3lgQ5VS7xXEzaHZ_jTSzw
