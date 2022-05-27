@@ -24,7 +24,7 @@ public class BranchService {
     private UserService userService;
 
     public Branch createBranch(Branch branch) {
-        branch.setOwner(userService.getUserByID(userService.getLoggedUserId()));
+        branch.setOwner(userService.getUserByID(userService.getLoggedUserId()).get());
         branch = branchRepository.save(branch);
         return branch;
     }

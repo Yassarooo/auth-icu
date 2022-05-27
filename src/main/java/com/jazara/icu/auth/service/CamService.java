@@ -30,14 +30,14 @@ public class CamService {
     private UserService userService;
 
     public Cam createCam(Cam cam) {
-        Room r = roomService.getRoomById(cam.getRoom_id());
-        if (r == null)
+        Optional<Room> r = roomService.getRoomById(cam.getRoom_id());
+        if (!r.isPresent())
             return null;
         Department d = roomService.getDepByRoomId(cam.getRoom_id());
         if (d == null)
             return null;
         if (d.getBranch() != null && (d.getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin())) {
-            cam.setRoom(r);
+            cam.setRoom(r.get());
             return camRepository.save(cam);
         }
         return null;
@@ -45,8 +45,8 @@ public class CamService {
 
     @Transactional
     public Cam editCam(Cam cam) {
-        Room r = roomService.getRoomById(cam.getRoom_id());
-        if (r == null)
+        Optional<Room> r = roomService.getRoomById(cam.getRoom_id());
+        if (!r.isPresent())
             return null;
         Department d = roomService.getDepByRoomId(cam.getRoom_id());
         if (d == null)
@@ -59,7 +59,7 @@ public class CamService {
             temp.setName(cam.getName());
             temp.setUrl(cam.getUrl());
             temp.setRoom_id(cam.getRoom_id());
-            temp.setRoom(r);
+            temp.setRoom(r.get());
             camRepository.save(temp);
             return temp;
         }
@@ -67,8 +67,8 @@ public class CamService {
     }
 
     public ArrayList<Cam> getCamsByRoomId(Long id) {
-        Room r = roomService.getRoomById(id);
-        if (r == null)
+        Optional<Room> r = roomService.getRoomById(id);
+        if (!r.isPresent())
             return null;
         Department d = roomService.getDepByRoomId(id);
         if (d == null)
