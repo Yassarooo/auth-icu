@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RequestMapping("/department")
 @RestController
@@ -40,17 +41,17 @@ public class DepartmentController {
     public ResponseEntity<?> getDepartmentsByBranchID(@PathVariable Long id) {
         Map<String, Object> tokenMap = new HashMap<String, Object>();
         final ArrayList<Department> deps = departmentService.getDepartmentsByBranchId(id);
-        tokenMap.put("deps",deps);
+        tokenMap.put("deps", deps);
         return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Department> getDep(@PathVariable Long id) {
-        final Department d = departmentService.getDepartmentById(id);
-        if (d == null) {
-            return new ResponseEntity<Department>(HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<Optional<Department>> getDep(@PathVariable Long id) {
+        final Optional<Department> d = departmentService.getDepartmentById(id);
+        if (!d.isPresent()) {
+            return new ResponseEntity<Optional<Department>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<Department>(d, HttpStatus.OK);
+        return new ResponseEntity<Optional<Department>>(d, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")

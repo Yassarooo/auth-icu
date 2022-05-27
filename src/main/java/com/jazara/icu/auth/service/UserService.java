@@ -201,7 +201,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public User getUserByID(final long id) {
+    public Optional<User> getUserByID(final long id) {
         return userRepository.findById(id);
     }
 

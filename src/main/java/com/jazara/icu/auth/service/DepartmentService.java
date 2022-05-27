@@ -7,11 +7,11 @@ import com.jazara.icu.auth.repository.DepartmentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class DepartmentService {
@@ -26,64 +26,77 @@ public class DepartmentService {
     private UserService userService;
 
     public Department createDepartment(Department dep) {
-        Branch b = branchService.getBranchById(dep.getBranch_id());
-        if (b != null && (b.getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin())) {
-            dep.setBranch(b);
-            return departmentRepository.save(dep);
+        Optional<Branch> b = branchService.getBranchById(dep.getBranch_id());
+        if (b.isPresent()) {
+            Branch temp = b.get();
+            if (temp.getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin()) {
+                dep.setBranch(temp);
+                return departmentRepository.save(dep);
+            }
         }
         return null;
     }
 
     @Transactional
     public Department editDepartment(Department dep) {
-        Branch b = branchService.getBranchById(dep.getBranch_id());
-        if (b != null && b.getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin()) {
-            try {
-                Department d = departmentRepository.findById(dep.getId());
-                if (d == null)
+        Optional<Branch> b = branchService.getBranchById(dep.getBranch_id());
+        if (b.isPresent()) {
+            Branch temp = b.get();
+            if (temp.getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin()) {
+                Optional<Department> d = departmentRepository.findById(dep.getId());
+                if (!d.isPresent())
                     return null;
-                d.setName(dep.getName());
-                d.setLocation(dep.getLocation());
-                d.setBranch_id(b.getId());
-                d.setBranch(b);
-                departmentRepository.save(d);
-                return d;
-            } catch (ObjectOptimisticLockingFailureException e) {
-                throw e;
+                Department tmp = d.get();
+                tmp.setName(dep.getName());
+                tmp.setLocation(dep.getLocation());
+                tmp.setBranch_id(temp.getId());
+                tmp.setBranch(temp);
+                departmentRepository.save(tmp);
+                return tmp;
+
             }
         }
         return null;
     }
 
     public Branch getBranchByDepId(Long id) {
-        Department d = departmentRepository.findById(id);
-        if (d != null && (d.getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin())) {
-            return d.getBranch();
+        Optional<Department> d = departmentRepository.findById(id);
+        if (d.isPresent()) {
+            Department temp = d.get();
+            if (temp.getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin()) {
+                return temp.getBranch();
+            }
+            return null;
         }
         return null;
     }
 
     public ArrayList<Department> getDepartmentsByBranchId(Long id) {
-        Branch b = branchService.getBranchById(id);
-        if (b != null && (b.getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin())) {
-            return departmentRepository.findAllByBranch_id(id);
+        Optional<Branch> b = branchService.getBranchById(id);
+        if (b.isPresent()) {
+            Branch temp = b.get();
+            if (temp.getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin()) {
+                return departmentRepository.findAllByBranch_id(id);
+            }
         }
         return new ArrayList<Department>();
     }
 
-    public Department getDepartmentById(Long id) {
-        Department dep = departmentRepository.findById(id);
-        if (dep == null) {
+    public Optional<Department> getDepartmentById(Long id) {
+        Optional<Department> dep = departmentRepository.findById(id);
+        if (!dep.isPresent())
             return null;
-        }
         return dep;
     }
 
     public Boolean deleteDepartmentById(Long id) {
-        Department d = departmentRepository.findById(id);
-        if (d != null && (d.getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin())) {
-            departmentRepository.delete(id);
-            return true;
+        Optional<Department> d = departmentRepository.findById(id);
+        if (d.isPresent()) {
+            Department temp = d.get();
+            if (temp.getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin()) {
+                departmentRepository.deleteById(id);
+                return true;
+            }
         }
         return false;
     }
