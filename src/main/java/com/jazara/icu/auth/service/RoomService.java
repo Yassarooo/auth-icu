@@ -7,11 +7,11 @@ import com.jazara.icu.auth.repository.RoomRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class RoomService {
@@ -37,52 +37,55 @@ public class RoomService {
     public Room editRoom(Room room) {
         Branch b = departmentService.getBranchByDepId(room.getDep_id());
         if (b != null && (b.getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin())) {
-            try {
-                Room r = roomRepository.findById(room.getId());
-                if (r == null)
-                    return null;
-                r.setName(room.getName());
-                roomRepository.save(r);
-                return r;
-            } catch (ObjectOptimisticLockingFailureException e) {
-                throw e;
-            }
+            Optional<Room> r = roomRepository.findById(room.getId());
+            if (!r.isPresent())
+                return null;
+            Room temp = r.get();
+            temp.setName(room.getName());
+            roomRepository.save(temp);
+            return temp;
         }
         return null;
     }
 
 
     public Department getDepByRoomId(Long id) {
-        Room r = roomRepository.findById(id);
-        if (r != null) {
-            Department d = departmentService.getDepartmentById(r.getDep_id());
-            return d;
+        Optional<Room> r = roomRepository.findById(id);
+        if (r.isPresent()) {
+            Optional<Department> d = departmentService.getDepartmentById(r.get().getDep_id());
+            return d.get();
         }
         LOGGER.info("null");
         return null;
     }
 
     public ArrayList<Room> getRoomsByDepId(Long id) {
-        Department d = departmentService.getDepartmentById(id);
-        if (d != null && (d.getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin())) {
-            return roomRepository.findAllByDep_id(id);
+        Optional<Department> d = departmentService.getDepartmentById(id);
+        if (d.isPresent()) {
+            Department temp = d.get();
+            if (temp.getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin()) {
+                return roomRepository.findAllByDep_id(id);
+            }
         }
         return new ArrayList<Room>();
     }
 
-    public Room getRoomById(Long id) {
-        Room room = roomRepository.findById(id);
-        if (room == null) {
+    public Optional<Room> getRoomById(Long id) {
+        Optional<Room> room = roomRepository.findById(id);
+        if (!room.isPresent()) {
             return null;
         }
         return room;
     }
 
     public Boolean deleteRoomById(Long id) {
-        Room r = roomRepository.findById(id);
-        if (r != null && (r.getDep().getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin())) {
-            roomRepository.delete(id);
-            return true;
+        Optional<Room> r = roomRepository.findById(id);
+        if (r.isPresent()) {
+            Room temp = r.get();
+            if (temp.getDep().getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin()) {
+                roomRepository.deleteById(id);
+                return true;
+            }
         }
         return false;
     }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RequestMapping("/branch")
 @RestController
@@ -40,17 +41,17 @@ public class BranchController {
     public ResponseEntity<?> getBranchesByOwnerId(@PathVariable Long id) {
         Map<String, Object> tokenMap = new HashMap<String, Object>();
         final ArrayList<Branch> branches = branchService.getBranchesByOwnerId(id);
-        tokenMap.put("branches",branches);
+        tokenMap.put("branches", branches);
         return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Branch> getBranch(@PathVariable Long id) {
-        final Branch b = branchService.getBranchById(id);
-        if (b == null) {
+    public ResponseEntity<Optional<Branch>> getBranch(@PathVariable Long id) {
+        final Optional<Branch> b = branchService.getBranchById(id);
+        if (!b.isPresent()) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<Branch>(b, HttpStatus.OK);
+        return new ResponseEntity<Optional<Branch>>(b, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")

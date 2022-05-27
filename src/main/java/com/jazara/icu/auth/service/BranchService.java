@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class BranchService {
@@ -30,15 +31,14 @@ public class BranchService {
 
     @Transactional
     public Branch editBranch(Branch branch) {
-        Branch b = branchRepository.findById(branch.getId());
-        if (b != null && ((b.getOwner().getId().equals(userService.getLoggedUserId())) || userService.isAdmin())) {
-            try {
-                b.setName(branch.getName().trim());
-                b.setLocation(branch.getLocation());
-                branchRepository.save(b);
-                return b;
-            } catch (ObjectOptimisticLockingFailureException e) {
-                throw e;
+        Optional<Branch> b = branchRepository.findById(branch.getId());
+        if (b.isPresent()) {
+            Branch temp = b.get();
+            if ((temp.getOwner().getId().equals(userService.getLoggedUserId())) || userService.isAdmin()) {
+                temp.setName(branch.getName().trim());
+                temp.setLocation(branch.getLocation());
+                branchRepository.save(temp);
+                return temp;
             }
         }
         return null;
@@ -50,19 +50,19 @@ public class BranchService {
         return new ArrayList<Branch>();
     }
 
-    public Branch getBranchById(Long id) {
-        Branch branch = branchRepository.findById(id);
-        if (branch == null) {
-            return null;
-        }
-        return branch;
+    public Optional<Branch> getBranchById(Long id) {
+        return branchRepository.findById(id);
     }
 
     public Boolean deleteBranchById(Long id) {
-        Branch b = branchRepository.findById(id);
-        if (b != null && (b.getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin())) {
-            branchRepository.delete(id);
-            return true;
+        Optional<Branch> b = branchRepository.findById(id);
+        if (b.isPresent()) {
+            Branch temp = b.get();
+            if (temp.getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin()) {
+                branchRepository.deleteById(id);
+                return true;
+            }
+            return false;
         }
         return false;
     }

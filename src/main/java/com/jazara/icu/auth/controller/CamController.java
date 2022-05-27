@@ -1,6 +1,7 @@
 package com.jazara.icu.auth.controller;
 
 
+import com.jazara.icu.auth.domain.Branch;
 import com.jazara.icu.auth.domain.Cam;
 import com.jazara.icu.auth.service.CamService;
 import com.jazara.icu.auth.service.ProduceCamService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RequestMapping("/cam")
 @RestController
@@ -46,17 +48,17 @@ public class CamController {
     public ResponseEntity<?> getCamsByRoomID(@PathVariable Long id) {
         Map<String, Object> tokenMap = new HashMap<String, Object>();
         final ArrayList<Cam> cams = camService.getCamsByRoomId(id);
-        tokenMap.put("cams",cams);
+        tokenMap.put("cams", cams);
         return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Cam> getCam(@PathVariable Long id) {
-        final Cam c = camService.getCamById(id);
-        if (c == null) {
-            return new ResponseEntity<Cam>(HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<Optional<Cam>> getCam(@PathVariable Long id) {
+        final Optional<Cam> c = camService.getCamById(id);
+        if (!c.isPresent()) {
+            return new ResponseEntity<Optional<Cam>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<Cam>(c, HttpStatus.OK);
+        return new ResponseEntity<Optional<Cam>>(c, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")

@@ -7,11 +7,11 @@ import com.jazara.icu.auth.repository.CamRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class CamService {
@@ -52,19 +52,16 @@ public class CamService {
         if (d == null)
             return null;
         if (d.getBranch() != null && d.getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin()) {
-            try {
-                Cam c = camRepository.findById(cam.getId());
-                if (c == null)
-                    return null;
-                c.setName(cam.getName());
-                c.setUrl(cam.getUrl());
-                c.setRoom_id(cam.getRoom_id());
-                c.setRoom(r);
-                camRepository.save(c);
-                return c;
-            } catch (ObjectOptimisticLockingFailureException e) {
-                throw e;
-            }
+            Optional<Cam> c = camRepository.findById(cam.getId());
+            if (!c.isPresent())
+                return null;
+            Cam temp = c.get();
+            temp.setName(cam.getName());
+            temp.setUrl(cam.getUrl());
+            temp.setRoom_id(cam.getRoom_id());
+            temp.setRoom(r);
+            camRepository.save(temp);
+            return temp;
         }
         return null;
     }
@@ -82,19 +79,22 @@ public class CamService {
         return new ArrayList<Cam>();
     }
 
-    public Cam getCamById(Long id) {
-        Cam c = camRepository.findById(id);
-        if (c == null) {
+    public Optional<Cam> getCamById(Long id) {
+        Optional<Cam> c = camRepository.findById(id);
+        if (!c.isPresent()) {
             return null;
         }
         return c;
     }
 
     public Boolean deleteCamById(Long id) {
-        Cam c = camRepository.findById(id);
-        if (c != null && (c.getRoom().getDep().getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin())) {
-            camRepository.delete(id);
-            return true;
+        Optional<Cam> c = camRepository.findById(id);
+        if (c.isPresent()) {
+            Cam temp = c.get();
+            if (temp.getRoom().getDep().getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin()) {
+                camRepository.deleteById(id);
+                return true;
+            }
         }
         return false;
     }

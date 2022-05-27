@@ -1,6 +1,7 @@
 package com.jazara.icu.auth.controller;
 
 
+import com.jazara.icu.auth.domain.Department;
 import com.jazara.icu.auth.domain.Room;
 import com.jazara.icu.auth.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RequestMapping("/room")
 @RestController
@@ -41,17 +43,17 @@ public class RoomController {
     public ResponseEntity<?> getRoomsByDepID(@PathVariable Long id) {
         Map<String, Object> tokenMap = new HashMap<String, Object>();
         final ArrayList<Room> rooms = roomService.getRoomsByDepId(id);
-        tokenMap.put("rooms",rooms);
+        tokenMap.put("rooms", rooms);
         return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Room> getRoom(@PathVariable Long id) {
-        final Room r = roomService.getRoomById(id);
-        if (r == null) {
+    public ResponseEntity<Optional<Room>> getRoom(@PathVariable Long id) {
+        final Optional<Room> r = roomService.getRoomById(id);
+        if (!r.isPresent()) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<Room>(r, HttpStatus.OK);
+        return new ResponseEntity<Optional<Room>>(r, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
