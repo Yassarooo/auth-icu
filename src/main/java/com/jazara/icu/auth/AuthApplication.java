@@ -12,6 +12,9 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableZuulProxy
@@ -32,6 +35,12 @@ public class AuthApplication implements CommandLineRunner {
 
     @Autowired
     RoleService roleService;
+
+    @Bean
+    public Docket productApi() {
+        return new Docket(DocumentationType.SWAGGER_2).select()
+                .apis(RequestHandlerSelectors.basePackage("com.jazara.icu.auth")).build();
+    }
 
     @Override
     public void run(String... strings) throws Exception {
