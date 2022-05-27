@@ -28,7 +28,6 @@ public class RegistrationController {
     @Autowired
     private UserService userService;
 
-
     public RegistrationController() {
         super();
     }
@@ -120,6 +119,5 @@ public class RegistrationController {
         else if (userService.loadUserByUsername(username) != null) ;
         return new ResponseEntity<String>("failed", HttpStatus.CONFLICT);
     }
-
 
 }

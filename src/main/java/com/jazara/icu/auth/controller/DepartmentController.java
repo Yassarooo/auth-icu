@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping("/department")
 @RestController
@@ -35,9 +37,11 @@ public class DepartmentController {
     }
 
     @GetMapping(value = "/all/{id}")
-    public ResponseEntity<ArrayList<Department>> getDepartmentsByBranchID(@PathVariable Long id) {
+    public ResponseEntity<?> getDepartmentsByBranchID(@PathVariable Long id) {
+        Map<String, Object> tokenMap = new HashMap<String, Object>();
         final ArrayList<Department> deps = departmentService.getDepartmentsByBranchId(id);
-        return new ResponseEntity<ArrayList<Department>>(deps, HttpStatus.OK);
+        tokenMap.put("deps",deps);
+        return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")

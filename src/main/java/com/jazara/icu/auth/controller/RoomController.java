@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping("/room")
 @RestController
@@ -36,9 +38,11 @@ public class RoomController {
     }
 
     @GetMapping(value = "/all/{id}")
-    public ResponseEntity<ArrayList<Room>> getRoomsByDepID(@PathVariable Long id) {
+    public ResponseEntity<?> getRoomsByDepID(@PathVariable Long id) {
+        Map<String, Object> tokenMap = new HashMap<String, Object>();
         final ArrayList<Room> rooms = roomService.getRoomsByDepId(id);
-        return new ResponseEntity<ArrayList<Room>>(rooms, HttpStatus.OK);
+        tokenMap.put("rooms",rooms);
+        return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")

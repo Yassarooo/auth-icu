@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping("/cam")
 @RestController
@@ -41,9 +43,11 @@ public class CamController {
     }
 
     @GetMapping(value = "/all/{id}")
-    public ResponseEntity<ArrayList<Cam>> getCamsByRoomID(@PathVariable Long id) {
+    public ResponseEntity<?> getCamsByRoomID(@PathVariable Long id) {
+        Map<String, Object> tokenMap = new HashMap<String, Object>();
         final ArrayList<Cam> cams = camService.getCamsByRoomId(id);
-        return new ResponseEntity<ArrayList<Cam>>(cams, HttpStatus.OK);
+        tokenMap.put("cams",cams);
+        return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
