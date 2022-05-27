@@ -12,6 +12,7 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 @EnableZuulProxy
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
