@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: auth-service
+  cloud:
+    config:
+      uri: https://config-icu.herokuapp.com
+      username: user
+      password: password
+
+jasypt:
+  encryptor:
+    password: jazaradebuggers
