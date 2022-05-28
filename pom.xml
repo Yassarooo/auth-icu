@@ -20,7 +20,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <spring.cloud.version>2021.0.2</spring.cloud.version>
-        <spring-boot-admin.version>3.0.0-M1</spring-boot-admin.version>
     </properties>
 
     <dependencies>
@@ -203,12 +202,12 @@
         <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-server</artifactId>
-            <version>${spring-boot.admin.version}</version>
+            <version>3.0.0-M1</version>
         </dependency>
         <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-dependencies</artifactId>
-            <version>${spring-boot.admin.version}</version>
+            <version>3.0.0-M1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
