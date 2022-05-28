@@ -68,19 +68,6 @@ public class User implements UserDetails {
         Facebook,Google,Guest
     }
 
-    public User(Long id, String name, String username, @Email String email, String gender, String password, String profilepic, Date dob, List<Role> roles,Account_Type type, boolean enabled) {
-        this.id = id;
-        this.name = name;
-        this.username = username;
-        this.email = email;
-        this.gender = gender;
-        this.password = password;
-        this.dob = dob;
-        this.roles = roles;
-        this.enabled = enabled;
-        this.acctype = type;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
