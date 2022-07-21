@@ -93,7 +93,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:5.2.7.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:5.2.7.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.2.7.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-starter-netflix-zuul:2.2.10.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-starter-netflix-zuul:2.2.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-netflix-zuul:2.2.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.netflix.netflix-commons:netflix-commons-util:0.3.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-starter:2.2.3.RELEASE" level="project" />
