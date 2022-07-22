@@ -58,7 +58,7 @@ Content-Type: application/json
 POST https://auth-icu.herokuapp.com/api/login?username=yrhacker@hotmail.com&password=yassaro
 
 ###register
-POST https://registration-icu.herokuapp.com/register
+POST https://auth-icu.herokuapp.com/registration
 Content-Type: application/json
 
 {"name": "yassar","username": "yassaro", "email": "yrhacker@hotmail.com", "gender": "Male","password": "yassaro", "phonenumber": "0992156565", "dob": "1999-07-09" }
