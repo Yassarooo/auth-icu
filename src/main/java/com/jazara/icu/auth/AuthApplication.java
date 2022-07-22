@@ -16,7 +16,6 @@ import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties
 
 @EnableZuulProxy
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
-@EnableAutoConfiguration
 @EnableDiscoveryClient
 @EnableEncryptableProperties
 public class AuthApplication implements CommandLineRunner {
