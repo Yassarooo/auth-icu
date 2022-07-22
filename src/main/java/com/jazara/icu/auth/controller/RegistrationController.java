@@ -104,8 +104,8 @@ public class RegistrationController {
 
     // activation
     @PostMapping(value = "/activate")
-    public ResponseEntity<String> activateUserAccount(@RequestBody String email,@RequestParam String serviceid) {
-        User u = userService.ActivateUser(email,serviceid);
+    public ResponseEntity<String> activateUserAccount(@RequestBody String email) {
+        User u = userService.ActivateUser(email);
         if (u == null)
             return new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
         return new ResponseEntity<String>("success", HttpStatus.OK);

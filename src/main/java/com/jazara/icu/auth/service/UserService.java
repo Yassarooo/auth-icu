@@ -186,9 +186,7 @@ public class UserService implements UserDetailsService {
         return authorized;
     }
 
-    public User ActivateUser(final String email, final String serviceid) {
-        LOGGER.info("SERVICE ID : " + serviceid);
-        if (discoveryClient.getInstances(serviceid).size() > 0) {
+    public User ActivateUser(final String email) {
             User u = findUserByUsername(email);
             if (u == null) {
                 LOGGER.info("User not found");
@@ -196,8 +194,6 @@ public class UserService implements UserDetailsService {
             }
             u.setEnabled(true);
             return userRepository.save(u);
-        }
-        return null;
     }
 
 
