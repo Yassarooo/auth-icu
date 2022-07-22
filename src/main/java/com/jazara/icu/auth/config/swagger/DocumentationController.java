@@ -17,6 +17,7 @@ public class DocumentationController implements SwaggerResourcesProvider {
     @Override
     public List get() {
         List resources = new ArrayList<>();
+        resources.add(swaggerResource("auth-service", "/v2/api-docs", "2.0"));
         resources.add(swaggerResource("registration-service", "/registration/v2/api-docs", "2.0"));
         return resources;
     }
