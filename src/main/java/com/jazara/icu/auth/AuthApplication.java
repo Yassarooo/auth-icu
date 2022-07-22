@@ -19,7 +19,6 @@ import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 @EnableDiscoveryClient
 @EnableEncryptableProperties
-@EntityScan
 public class AuthApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
