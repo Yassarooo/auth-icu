@@ -1,6 +1,7 @@
 package com.jazara.icu.auth.config.swagger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -23,27 +24,6 @@ import java.util.List;
 
 @Configuration
 public class SpringFoxConfig {
-
-    @Autowired
-    private ServiceDefinitionsContext definitionContext;
-
-    @Bean
-    public RestTemplate configureTempalte() {
-        return new RestTemplate();
-    }
-
-    @Primary
-    @Bean
-    @Lazy
-    public SwaggerResourcesProvider swaggerResourcesProvider(InMemorySwaggerResourcesProvider defaultResourcesProvider, RestTemplate temp) {
-        return () -> {
-            List<SwaggerResource> resources = new ArrayList<>(defaultResourcesProvider.get());
-            resources.clear();
-            resources.addAll(definitionContext.getSwaggerDefinitions());
-            return resources;
-        };
-    }
-
 
     private ApiKey apiKey() {
         return new ApiKey("JWT", "Authorization", "header");
