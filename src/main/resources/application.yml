@@ -7,3 +7,7 @@ spring:
 jasypt:
   encryptor:
     password: jazaradebuggers
+
+swagger:
+  config:
+    refreshrate: 5000
