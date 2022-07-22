@@ -33,29 +33,42 @@ public class RegistrationController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) throws Exception {
+    public ResponseEntity<Map<String, Object>> login(@RequestParam String username, @RequestParam String password) throws Exception {
 
+        Map<String, Object> tokenMap = new HashMap<String, Object>();
         userService.authenticate(username, password);
 
         final UserDetails userDetails = userService.loadUserByUsername(username);
         User appUser = userService.findUserByUsername(username);
         if (appUser == null) {
-            return new ResponseEntity<String>("There is no account with given username or email", HttpStatus.UNAUTHORIZED);
+            tokenMap.put("success", false);
+            tokenMap.put("message", "There is no account with given username or email");
+            tokenMap.put("result", "");
+            return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.UNAUTHORIZED);
         }
         if (!appUser.isEnabled()) {
-            return new ResponseEntity<String>("Please Activate Your Account", HttpStatus.UNAUTHORIZED);
+            tokenMap.put("success", false);
+            tokenMap.put("message", "Please Activate Your Account");
+            tokenMap.put("result", "");
+            return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.UNAUTHORIZED);
         } else {
             final String token = jwtTokenUtil.generateToken(userDetails);
 
-            Map<String, Object> tokenMap = new HashMap<String, Object>();
+            Map<String, Object> resultTokenMap = new HashMap<String, Object>();
 
             if (token != null) {
-                tokenMap.put("token", token);
-                tokenMap.put("user", appUser);
+                resultTokenMap.put("token", token);
+                resultTokenMap.put("user", appUser);
+
+                tokenMap.put("success", true);
+                tokenMap.put("message", "");
+                tokenMap.put("result", resultTokenMap);
 
                 return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
             } else {
-                tokenMap.put("token", null);
+                tokenMap.put("success", false);
+                tokenMap.put("message", "invalid token");
+                tokenMap.put("result", "");
                 return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.UNAUTHORIZED);
             }
         }
