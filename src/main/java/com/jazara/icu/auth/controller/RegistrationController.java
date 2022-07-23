@@ -22,6 +22,8 @@ import java.util.Map;
 public class RegistrationController {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
+    CustomResponse customResponse;
+
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
@@ -41,16 +43,10 @@ public class RegistrationController {
         final UserDetails userDetails = userService.loadUserByUsername(username);
         User appUser = userService.findUserByUsername(username);
         if (appUser == null) {
-            tokenMap.put("success", false);
-            tokenMap.put("message", "There is no account with given username or email");
-            tokenMap.put("result", "");
-            return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.UNAUTHORIZED);
+            return customResponse.HandleResponse(false, "There is no account with given username or email", "", HttpStatus.UNAUTHORIZED);
         }
         if (!appUser.isEnabled()) {
-            tokenMap.put("success", false);
-            tokenMap.put("message", "Please Activate Your Account");
-            tokenMap.put("result", "");
-            return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.UNAUTHORIZED);
+            return customResponse.HandleResponse(false, "Please Activate Your Account", "", HttpStatus.UNAUTHORIZED);
         } else {
             final String token = jwtTokenUtil.generateToken(userDetails);
 
@@ -60,59 +56,53 @@ public class RegistrationController {
                 resultTokenMap.put("token", token);
                 resultTokenMap.put("user", appUser);
 
-                tokenMap.put("success", true);
-                tokenMap.put("message", "");
-                tokenMap.put("result", resultTokenMap);
-
-                return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
+                return customResponse.HandleResponse(true, "", resultTokenMap, HttpStatus.OK);
             } else {
-                tokenMap.put("success", false);
-                tokenMap.put("message", "invalid token");
-                tokenMap.put("result", "");
-                return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.UNAUTHORIZED);
+                return customResponse.HandleResponse(false, "Invalid Token", "", HttpStatus.UNAUTHORIZED);
             }
         }
     }
 
     @GetMapping(value = "/checkjwttoken")
-    public ResponseEntity<?> checktoken(@RequestParam String token) {
+    public ResponseEntity<Map<String, Object>> checktoken(@RequestParam String token) {
+        Map<String, Object> tokenMap = new HashMap<String, Object>();
         try {
             if (jwtTokenUtil.isTokenExpired(token))
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+                return customResponse.HandleResponse(false, "Expired Token", "", HttpStatus.UNAUTHORIZED);
             else {
-                return new ResponseEntity<>(HttpStatus.OK);
+                return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
             }
         } catch (ExpiredJwtException e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return customResponse.HandleResponse(false, "Expired Token", "", HttpStatus.UNAUTHORIZED);
         }
 
     }
 
     //get logged in user
     @GetMapping("/user")
-    public User user() {
+    public ResponseEntity<Map<String, Object>> getLoggedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String loggedUsername = auth.getName();
-        return userService.findUserByUsername(loggedUsername);
+        return customResponse.HandleResponse(true, "", userService.findUserByUsername(loggedUsername), HttpStatus.OK);
     }
 
     //get logged in user id
     @GetMapping("/current")
-    public Long getLoggedUserID() {
-        return userService.getLoggedUserId();
+    public ResponseEntity<Map<String, Object>> getLoggedUserID() {
+        return customResponse.HandleResponse(true, "", userService.getLoggedUserId(), HttpStatus.OK);
     }
 
     // Registration
     @PostMapping("/register")
-    public ResponseEntity<String> registerUserAccount(@RequestBody User accountDto) {
+    public ResponseEntity<Map<String, Object>> registerUserAccount(@RequestBody User accountDto) {
         LOGGER.debug("Registering user account with information: {}", accountDto);
 
         final User registered = userService.save(accountDto);
         if (registered == null) {
-            return new ResponseEntity<String>("failed", HttpStatus.CONFLICT);
+            return customResponse.HandleResponse(false, "couldn't register account", userService.getLoggedUserId(), HttpStatus.OK);
         }
         LOGGER.info("registered account : " + registered.getEmail());
-        return new ResponseEntity<String>(registered.getEmail(), HttpStatus.OK);
+        return customResponse.HandleResponse(true, "", registered.getEmail(), HttpStatus.OK);
     }
 
     // activation
