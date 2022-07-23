@@ -102,9 +102,11 @@ public class UserService implements UserDetailsService {
 
     public User save(User User) {
 
-        if (this.loadUserByUsername(User.getEmail()) != null || this.loadUserByUsername(User.getUsername()) != null)
+        if (this.loadUserByUsername(User.getEmail()) != null || this.loadUserByUsername(User.getUsername()) != null) {
+            LOGGER.info("retuuuuuuuuuuuuuuuurn nuuuuuuuuulllllllll");
             return null;
-        else {
+        } else {
+            LOGGER.info("Elseeeeeeeeeeeeeeeeeeeeeeee");
             Role role = roleService.findByName("USER");
             List<Role> roles = new ArrayList<Role>();
             roles.add(role);
@@ -187,13 +189,13 @@ public class UserService implements UserDetailsService {
     }
 
     public User ActivateUser(final String email) {
-            User u = findUserByUsername(email);
-            if (u == null) {
-                LOGGER.info("User not found");
-                return null;
-            }
-            u.setEnabled(true);
-            return userRepository.save(u);
+        User u = findUserByUsername(email);
+        if (u == null) {
+            LOGGER.info("User not found");
+            return null;
+        }
+        u.setEnabled(true);
+        return userRepository.save(u);
     }
 
 
