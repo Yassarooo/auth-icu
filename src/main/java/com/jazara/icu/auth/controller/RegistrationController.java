@@ -99,7 +99,7 @@ public class RegistrationController {
 
         final User registered = userService.save(accountDto);
         if (registered == null) {
-            return customResponse.HandleResponse(false, "couldn't register account", userService.getLoggedUserId(), HttpStatus.OK);
+            return customResponse.HandleResponse(false, "couldn't register account", "", HttpStatus.OK);
         }
         LOGGER.info("registered account : " + registered.getEmail());
         return customResponse.HandleResponse(true, "", registered.getEmail(), HttpStatus.OK);
