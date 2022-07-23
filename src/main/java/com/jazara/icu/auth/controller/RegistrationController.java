@@ -1,6 +1,7 @@
 package com.jazara.icu.auth.controller;
 
 import com.jazara.icu.auth.domain.User;
+import com.jazara.icu.auth.service.CustomResponse;
 import com.jazara.icu.auth.service.JwtTokenUtil;
 import com.jazara.icu.auth.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
