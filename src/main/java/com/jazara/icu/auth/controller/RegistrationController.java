@@ -22,7 +22,8 @@ import java.util.Map;
 public class RegistrationController {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-    CustomResponse customResponse;
+    @Autowired
+    private CustomResponse customResponse;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
