@@ -1,8 +1,11 @@
 package com.jazara.icu.auth.controller;
 
 
+import com.jazara.icu.auth.domain.Person;
 import com.jazara.icu.auth.payload.UploadFileResponse;
+import com.jazara.icu.auth.service.CustomResponse;
 import com.jazara.icu.auth.service.FileStorageService;
+import com.jazara.icu.auth.service.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +22,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+@RequestMapping("/api/files")
 @RestController
 public class FileController {
 
@@ -28,6 +33,10 @@ public class FileController {
 
     @Autowired
     private FileStorageService fileStorageService;
+    @Autowired
+    private PersonService personService;
+    @Autowired
+    private CustomResponse customResponse;
 
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestPart("file") MultipartFile file) {
@@ -51,7 +60,7 @@ public class FileController {
     }
 
     @PostMapping("/uploadPersonimage")
-    public UploadFileResponse uploadCarImage(@RequestParam("image") MultipartFile file, @RequestHeader Long id) {
+    public UploadFileResponse uploadPersonImage(@RequestPart("image") MultipartFile file, @RequestHeader Long id) {
         String fileName = fileStorageService.storeFile(file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -59,23 +68,21 @@ public class FileController {
                 .path(fileName)
                 .toUriString();
 
-        /*Car car = carService.getCarById(id);
-
-        List<String> imgs = new ArrayList<String>();
-        imgs = car.getImages();
-        imgs.add(fileDownloadUri);
-        car.setImages(imgs);
-        carService.createOrUpdateCar(car, true);*/
+        Optional<Person> person = personService.getPersonById(id);
+        Person p = person.get();
+        p.setImageLink(fileDownloadUri);
+        personService.editPerson(p);
 
         return new UploadFileResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
+
     }
 
     @PostMapping("/uploadPersonimages")
-    public List<UploadFileResponse> uploadCarImages(@RequestParam("images") MultipartFile[] files, @RequestHeader Long id) {
+    public List<UploadFileResponse> uploadPersonImages(@RequestParam("images") MultipartFile[] files, @RequestHeader Long id) {
         return Arrays.asList(files)
                 .stream()
-                .map(file -> uploadCarImage(file, id))
+                .map(file -> uploadPersonImage(file, id))
                 .collect(Collectors.toList());
     }
 

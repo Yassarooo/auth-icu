@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@RequestMapping("/cam")
+@RequestMapping("/api/cam")
 @RestController
 public class CamController {
 

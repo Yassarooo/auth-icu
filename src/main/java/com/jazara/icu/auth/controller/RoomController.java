@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@RequestMapping("/room")
+@RequestMapping("/api/room")
 @RestController
 public class RoomController {
 

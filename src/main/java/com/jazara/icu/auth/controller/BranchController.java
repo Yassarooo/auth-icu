@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@RequestMapping("/branch")
+@RequestMapping("/api/branch")
 @RestController
 public class BranchController {
 

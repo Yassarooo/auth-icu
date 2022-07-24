@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@RequestMapping("/department")
+@RequestMapping("/api/department")
 @RestController
 public class DepartmentController {
 
