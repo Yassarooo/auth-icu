@@ -42,11 +42,15 @@ public class PersonController {
     }
 
     @GetMapping(value = "/user/{id}")
-    public ResponseEntity<Map<String, Object>> getPersonsByOwnerId(@PathVariable Long id) {
-        Map<String, Object> tokenMap = new HashMap<String, Object>();
-        final ArrayList<Person> persons = personService.getPersonsByOwnerId(id);
-        tokenMap.put("persons", persons);
-        return customResponse.HandleResponse(true, "", tokenMap, HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> getPersonsByOwnerId(@PathVariable Long id) throws Exception {
+        try {
+            Map<String, Object> tokenMap = new HashMap<String, Object>();
+            final ArrayList<Person> persons = personService.getPersonsByOwnerId(id);
+            tokenMap.put("persons", persons);
+            return customResponse.HandleResponse(true, "", tokenMap, HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/{id}")

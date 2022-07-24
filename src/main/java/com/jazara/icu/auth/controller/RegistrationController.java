@@ -124,6 +124,17 @@ public class RegistrationController {
         return new ResponseEntity<String>("success", HttpStatus.OK);
     }
 
+    @PostMapping(value = "/changePassword")
+    public ResponseEntity<?> ChangeUserPass(@RequestBody String newPass) throws Exception {
+        try {
+            userService.changeUserPassword(newPass);
+            return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+        }
+
+    }
+
     //check if username or email is used or no
     @PostMapping("/checkusername")
     public ResponseEntity<?> checkUsernameOrEmail(@RequestParam String username) {
@@ -131,6 +142,16 @@ public class RegistrationController {
             return customResponse.HandleResponse(true, "not used", "", HttpStatus.OK);
         else if (userService.loadUserByUsername(username) != null) ;
         return customResponse.HandleResponse(false, "used email or username", "", HttpStatus.OK);
+    }
+
+    @PostMapping("/deleteAll")
+    public ResponseEntity<?> DeleteAllUsers() throws Exception {
+        try {
+            userService.deleteAllUsers();
+            return customResponse.HandleResponse(true, "deleted all users", "", HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+        }
     }
 
 }

@@ -45,10 +45,10 @@ public class PersonService {
         return null;
     }
 
-    public ArrayList<Person> getPersonsByOwnerId(Long id) {
-        if (id.equals(userService.getLoggedUserId()))
+    public ArrayList<Person> getPersonsByOwnerId(Long id) throws Exception {
+        if (id.equals(userService.getLoggedUserId()) || userService.isAdmin())
             return personRepository.findAllByOwner_Id(id);
-        return new ArrayList<Person>();
+        throw new Exception("UNAUTHORIZED");
     }
 
     public Optional<Person> getPersonById(Long id) {

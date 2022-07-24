@@ -103,10 +103,8 @@ public class UserService implements UserDetailsService {
     public User save(User User) {
 
         if (this.loadUserByUsername(User.getEmail()) != null || this.loadUserByUsername(User.getUsername()) != null) {
-            LOGGER.info("retuuuuuuuuuuuuuuuurn nuuuuuuuuulllllllll");
             return null;
         } else {
-            LOGGER.info("Elseeeeeeeeeeeeeeeeeeeeeeee");
             Role role = roleService.findByName("USER");
             List<Role> roles = new ArrayList<Role>();
             roles.add(role);
@@ -182,10 +180,26 @@ public class UserService implements UserDetailsService {
         return Loggedin.getId();
     }
 
+    public User getLoggedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = auth.getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        User Loggedin = userRepository.findByUsername(username);
+        if (Loggedin == null) {
+            return null;
+        }
+        LOGGER.info("Logged user id : " + Loggedin.getId());
+        return Loggedin;
+    }
+
     public Boolean isAdmin() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        boolean authorized = auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        return authorized;
+        return auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
     public User ActivateUser(final String email) {
@@ -203,17 +217,24 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id);
     }
 
-    public void changeUserPassword(final User user, final String password) {
-        user.setPassword(bCryptPasswordEncoder.encode(password));
-        userRepository.save(user);
+    public void changeUserPassword(final String password) throws Exception {
+        User logged = this.getLoggedUser();
+        if (logged != null) {
+            logged.setPassword(bCryptPasswordEncoder.encode(password));
+            userRepository.save(logged);
+        } else
+            throw new Exception("no logged user");
     }
 
     public boolean checkIfValidOldPassword(final User user, final String oldPassword) {
         return bCryptPasswordEncoder.matches(oldPassword, user.getPassword());
     }
 
-    public void deleteAllUsers() {
-        userRepository.deleteAll();
+    public void deleteAllUsers() throws Exception {
+        if (isAdmin())
+            userRepository.deleteAll();
+        else
+            throw new Exception("UNAAUTHORIZED");
     }
 
 

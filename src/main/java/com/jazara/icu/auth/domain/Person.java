@@ -39,7 +39,6 @@ public class Person {
     private String name;
 
     @NotNull
-    @Column(unique = true)
     private Integer age;
 
     @Column
