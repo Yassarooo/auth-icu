@@ -1,4 +1,4 @@
-package com.jazara.icu.auth.config;
+package com.jazara.icu.auth.config.security;
 
 import java.io.IOException;
 import java.io.Serializable;

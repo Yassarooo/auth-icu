@@ -1,6 +1,7 @@
 package com.jazara.icu.auth.controller;
 
 import com.jazara.icu.auth.domain.Department;
+import com.jazara.icu.auth.service.CustomResponse;
 import com.jazara.icu.auth.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,24 +18,27 @@ import java.util.Optional;
 public class DepartmentController {
 
     @Autowired
+    CustomResponse customResponse;
+
+    @Autowired
     private DepartmentService departmentService;
 
     @PostMapping(value = "/add")
-    public ResponseEntity<String> createDep(@RequestBody Department dep) {
+    public ResponseEntity<?> createDep(@RequestBody Department dep) {
         final Department d = departmentService.createDepartment(dep);
         if (d == null) {
-            return new ResponseEntity<String>("cannot", HttpStatus.INTERNAL_SERVER_ERROR);
+            return customResponse.HandleResponse(false, "cannot add department", "", HttpStatus.OK);
         }
-        return new ResponseEntity<String>("success", HttpStatus.OK);
+        return customResponse.HandleResponse(true, "", d, HttpStatus.OK);
     }
 
     @PutMapping(value = "/edit/{id}")
-    public ResponseEntity<String> editDep(@PathVariable Long id, @RequestBody Department dep) {
+    public ResponseEntity<?> editDep(@PathVariable Long id, @RequestBody Department dep) {
         Department d = departmentService.editDepartment(dep);
         if (d == null) {
-            return new ResponseEntity<String>("cannot", HttpStatus.BAD_REQUEST);
+            return customResponse.HandleResponse(false, "cannot edit department", "", HttpStatus.OK);
         }
-        return new ResponseEntity<String>("success", HttpStatus.OK);
+        return customResponse.HandleResponse(true, "", d, HttpStatus.OK);
     }
 
     @GetMapping(value = "/all/{id}")
@@ -42,22 +46,22 @@ public class DepartmentController {
         Map<String, Object> tokenMap = new HashMap<String, Object>();
         final ArrayList<Department> deps = departmentService.getDepartmentsByBranchId(id);
         tokenMap.put("deps", deps);
-        return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
+        return customResponse.HandleResponse(true, "", tokenMap, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Optional<Department>> getDep(@PathVariable Long id) {
+    public ResponseEntity<?> getDep(@PathVariable Long id) {
         final Optional<Department> d = departmentService.getDepartmentById(id);
         if (!d.isPresent()) {
-            return new ResponseEntity<Optional<Department>>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return customResponse.HandleResponse(false, "not found", "", HttpStatus.OK);
         }
-        return new ResponseEntity<Optional<Department>>(d, HttpStatus.OK);
+        return customResponse.HandleResponse(true, "", d, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> deleteDep(@PathVariable Long id) {
+    public ResponseEntity<?> deleteDep(@PathVariable Long id) {
         if (departmentService.deleteDepartmentById(id))
-            return new ResponseEntity<String>("success", HttpStatus.OK);
-        return new ResponseEntity<String>("cannot", HttpStatus.UNAUTHORIZED);
+            return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
+        return customResponse.HandleResponse(false, "cannot delete department", "", HttpStatus.OK);
     }
 }

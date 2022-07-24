@@ -3,6 +3,7 @@ package com.jazara.icu.auth.controller;
 
 import com.jazara.icu.auth.domain.Department;
 import com.jazara.icu.auth.domain.Room;
+import com.jazara.icu.auth.service.CustomResponse;
 import com.jazara.icu.auth.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,24 +20,26 @@ import java.util.Optional;
 public class RoomController {
 
     @Autowired
+    private CustomResponse customResponse;
+    @Autowired
     private RoomService roomService;
 
     @PostMapping(value = "/add")
-    public ResponseEntity<String> createRoom(@RequestBody Room room) {
+    public ResponseEntity<?> createRoom(@RequestBody Room room) {
         final Room r = roomService.createRoom(room);
         if (r == null) {
-            return new ResponseEntity<String>("cannot", HttpStatus.INTERNAL_SERVER_ERROR);
+            return customResponse.HandleResponse(false, "cannot add room", "", HttpStatus.OK);
         }
-        return new ResponseEntity<String>("success", HttpStatus.OK);
+        return customResponse.HandleResponse(false, "", r, HttpStatus.OK);
     }
 
     @PutMapping(value = "/edit/{id}")
-    public ResponseEntity<String> editRoom(@PathVariable Long id, @RequestBody Room room) {
+    public ResponseEntity<?> editRoom(@PathVariable Long id, @RequestBody Room room) {
         Room r = roomService.editRoom(room);
         if (r == null) {
-            return new ResponseEntity<String>("cannot", HttpStatus.BAD_REQUEST);
+            return customResponse.HandleResponse(false, "cannot edit room", "", HttpStatus.OK);
         }
-        return new ResponseEntity<String>("success", HttpStatus.OK);
+        return customResponse.HandleResponse(true, "", r, HttpStatus.OK);
     }
 
     @GetMapping(value = "/all/{id}")
@@ -44,22 +47,22 @@ public class RoomController {
         Map<String, Object> tokenMap = new HashMap<String, Object>();
         final ArrayList<Room> rooms = roomService.getRoomsByDepId(id);
         tokenMap.put("rooms", rooms);
-        return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
+        return customResponse.HandleResponse(true, "", tokenMap, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Optional<Room>> getRoom(@PathVariable Long id) {
+    public ResponseEntity<?> getRoom(@PathVariable Long id) {
         final Optional<Room> r = roomService.getRoomById(id);
         if (!r.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return customResponse.HandleResponse(false, "not found", "", HttpStatus.OK);
         }
-        return new ResponseEntity<Optional<Room>>(r, HttpStatus.OK);
+        return customResponse.HandleResponse(true, "", r, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> deleteRoom(@PathVariable Long id) {
+    public ResponseEntity<?> deleteRoom(@PathVariable Long id) {
         if (roomService.deleteRoomById(id))
-            return new ResponseEntity<String>("success", HttpStatus.OK);
-        return new ResponseEntity<String>("cannot", HttpStatus.UNAUTHORIZED);
+            return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
+        return customResponse.HandleResponse(false, "cannot delete room", "", HttpStatus.OK);
     }
 }

@@ -118,11 +118,11 @@ public class RegistrationController {
 
     //check if username or email is used or no
     @PostMapping("/checkusername")
-    public ResponseEntity<String> checkUsernameOrEmail(@RequestParam String username) {
+    public ResponseEntity<?> checkUsernameOrEmail(@RequestParam String username) {
         if (userService.loadUserByUsername(username) == null)
-            return new ResponseEntity<String>("success", HttpStatus.OK);
+            return customResponse.HandleResponse(true, "not used", "", HttpStatus.OK);
         else if (userService.loadUserByUsername(username) != null) ;
-        return new ResponseEntity<String>("failed", HttpStatus.CONFLICT);
+        return customResponse.HandleResponse(false, "used email or username", "", HttpStatus.OK);
     }
 
 }
