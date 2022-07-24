@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,7 +42,13 @@ public class RegistrationController {
     public ResponseEntity<Map<String, Object>> login(@RequestParam String username, @RequestParam String password) throws Exception {
 
         Map<String, Object> tokenMap = new HashMap<String, Object>();
-        userService.authenticate(username, password);
+        try {
+            userService.authenticate(username, password);
+        } catch (DisabledException e) {
+            return customResponse.HandleResponse(false, "Please Activate Your Account", "", HttpStatus.UNAUTHORIZED);
+        } catch (BadCredentialsException e) {
+            return customResponse.HandleResponse(false, "Incorrect Email or Password", "", HttpStatus.UNAUTHORIZED);
+        }
 
         final UserDetails userDetails = userService.loadUserByUsername(username);
         User appUser = userService.findUserByUsername(username);
