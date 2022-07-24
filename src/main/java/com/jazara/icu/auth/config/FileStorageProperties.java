@@ -1,10 +1,13 @@
 package com.jazara.icu.auth.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix = "file")
+@Component
 public class FileStorageProperties {
-    private String uploadDir = "/app";
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     public String getUploadDir() {
         return uploadDir;
