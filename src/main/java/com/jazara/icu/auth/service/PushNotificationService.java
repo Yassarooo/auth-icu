@@ -101,7 +101,7 @@ public class PushNotificationService {
 
     private Map<String, String> getSamplePayloadData() {
         Map<String, String> pushData = new HashMap<>();
-        pushData.put("carid", defaultsProperties.getDefaults().get("carid"));
+        pushData.put("evetid", defaultsProperties.getDefaults().get("eventid"));
         pushData.put("click_action", defaultsProperties.getDefaults().get("click_action"));
         pushData.put("route", defaultsProperties.getDefaults().get("route"));
         return pushData;
