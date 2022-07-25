@@ -234,7 +234,7 @@ public class UserService implements UserDetailsService {
         if (isAdmin())
             userRepository.deleteAll();
         else
-            throw new Exception("UNAAUTHORIZED");
+            throw new Exception("UNAUTHORIZED");
     }
 
 

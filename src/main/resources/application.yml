@@ -11,3 +11,5 @@ jasypt:
 swagger:
   config:
     refreshrate: 5000
+
+app.firebase-configuration-file = icu-project-abdc8-firebase-adminsdk-osgg9-73b7828113.json
