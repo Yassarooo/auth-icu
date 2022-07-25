@@ -1,6 +1,7 @@
 package com.jazara.icu.auth.controller;
 
 import com.jazara.icu.auth.firebase.PushNotificationService;
+import com.jazara.icu.auth.payload.DefaultsProperties;
 import com.jazara.icu.auth.payload.PushNotificationRequest;
 import com.jazara.icu.auth.payload.PushNotificationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequestMapping("/api")
 @RestController
 public class PushNotificationController {
 
     @Autowired
     private PushNotificationService pushNotificationService;
+
+    @Autowired
+    private DefaultsProperties defaultsProperties;
 
     public PushNotificationController(PushNotificationService pushNotificationService) {
         this.pushNotificationService = pushNotificationService;
@@ -51,6 +56,9 @@ public class PushNotificationController {
 
     @GetMapping("/notification")
     public ResponseEntity sendSampleNotification() {
+
+        System.out.println(defaultsProperties.getDefaults().get("topic"));
+
         try {
             pushNotificationService.sendSamplePushNotification();
             return new ResponseEntity<>(new PushNotificationResponse(HttpStatus.OK.value(), "Notification has been sent."), HttpStatus.OK);

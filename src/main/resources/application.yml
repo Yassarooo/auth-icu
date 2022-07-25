@@ -14,12 +14,13 @@ swagger:
 
 app.firebase-configuration-file: icu-project-abdc8-firebase-adminsdk-osgg9-73b7828113.json
 
-app.notifications.defaults :
-  topic: 'all'
-  title: 'Alert!'
-  body: 'Watch out ! Click to see details'
-  image: ''
-  token: 'dcrq8MJFRnGrltu_EedHUm:--'
-  carid: '23'
-  route: '/bookcar'
-  click_action: 'FLUTTER_NOTIFICATION_CLICK'
+app-defaults:
+  defaults:
+    topic: 'all'
+    title: 'Alert!'
+    body: 'Watch out ! Click to see details'
+    image: ''
+    token: 'dcrq8MJFRnGrltu_EedHUm:--'
+    carid: '23'
+    route: '/bookcar'
+    click_action: 'FLUTTER_NOTIFICATION_CLICK'
