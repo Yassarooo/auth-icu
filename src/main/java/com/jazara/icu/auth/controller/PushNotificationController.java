@@ -18,6 +18,8 @@ public class PushNotificationController {
     @Autowired
     private PushNotificationService pushNotificationService;
 
+    @Autowired
+    private DefaultsProperties defaultsProperties;
 
     public PushNotificationController(PushNotificationService pushNotificationService) {
         this.pushNotificationService = pushNotificationService;
@@ -55,7 +57,7 @@ public class PushNotificationController {
     @GetMapping("/notification")
     public ResponseEntity sendSampleNotification() {
 
-        /*System.out.println(defaultsProperties.getDefaults().get("topic"));*/
+        System.out.println(defaultsProperties.getDefaults().get("topic"));
 
         try {
             pushNotificationService.sendSamplePushNotification();
