@@ -8,5 +8,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public interface PushNotificationRepository extends CrudRepository<PushNotificationRequest, Long> {
-    PushNotificationRequest findByCarid(String carid);
+    PushNotificationRequest findByEventid(String eventid);
 }

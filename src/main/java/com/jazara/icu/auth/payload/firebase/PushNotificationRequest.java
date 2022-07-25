@@ -19,6 +19,8 @@ public class PushNotificationRequest {
     private Long id;
 
     @Column
+    private Long eventid;
+    @Column
     private String title;
     @Column
     private String body;
@@ -122,5 +124,13 @@ public class PushNotificationRequest {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Long getEventid() {
+        return eventid;
+    }
+
+    public void setEventid(Long eventid) {
+        this.eventid = eventid;
     }
 }
