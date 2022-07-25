@@ -13,3 +13,4 @@ swagger:
     refreshrate: 5000
 
 app.firebase-configuration-file: icu-project-abdc8-firebase-adminsdk-osgg9-73b7828113.json
+app.notifications.defaults: {topic: 'all', title: 'Alert! ', body: 'Watch out ! Click to see details',image: '', token: 'dcrq8MJFRnGrltu_EedHUm:APA91bGtPeQkda1ZJB-abzZDsmK05MUTmdmY7G030rv5vgoPeL2qbMw23KRb90Np2aXtHh3AVQYUPAdViExmZboa9ZZkg-GFz9JQD49BPZANHlpAnc_GufpUq67HLPVZgaTckpRFxFOz', carid: '23', route: '/bookcar', click_action: 'FLUTTER_NOTIFICATION_CLICK'}
