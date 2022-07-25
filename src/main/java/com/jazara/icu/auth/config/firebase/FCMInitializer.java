@@ -16,7 +16,7 @@ import java.io.IOException;
 @Service
 public class FCMInitializer {
 
-    @Value("/icu-project-abdc8-firebase-adminsdk-osgg9-73b7828113.json")
+    @Value("/icu-project-abdc8-firebase-adminsdk-osgg9-b484722fa6.json")
     private String firebaseConfigPath;
 
     Logger logger = LoggerFactory.getLogger(FCMInitializer.class);
