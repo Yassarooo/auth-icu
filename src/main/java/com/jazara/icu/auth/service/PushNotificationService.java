@@ -1,14 +1,14 @@
-package com.jazara.icu.auth.firebase;
+package com.jazara.icu.auth.service;
 
-import com.jazara.icu.auth.payload.DefaultsProperties;
-import com.jazara.icu.auth.payload.PushNotificationRequest;
+import com.jazara.icu.auth.config.DefaultsProperties;
+import com.jazara.icu.auth.domain.CustomEvent;
+import com.jazara.icu.auth.payload.firebase.PushNotificationRequest;
 import com.jazara.icu.auth.repository.PushNotificationRepository;
+import com.jazara.icu.auth.service.firebase.FCMService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,40 +51,37 @@ public class PushNotificationService {
         }
     }
 
-/*    public void sendCarPushNotification(Car c, PushNotificationRequest request) {
+    public void sendEventPushNotification(CustomEvent event, PushNotificationRequest request) {
         try {
-            createOrUpdateNotification(getCarPushNotificationRequest(c, request), false);
-            fcmService.sendMessage(getPayloadDataFromRequest(request), getCarPushNotificationRequest(c, request));
+            createOrUpdateNotification(getEventPushNotificationRequest(event, request), false);
+            fcmService.sendMessage(getPayloadDataFromRequest(request), getEventPushNotificationRequest(event, request));
         } catch (InterruptedException | ExecutionException e) {
             logger.error(e.getMessage());
         }
-    }*/
+    }
 
     private Map<String, String> getPayloadDataFromRequest(PushNotificationRequest request) {
         Map<String, String> pushData = new HashMap<>();
-        pushData.put("carid", request.getCarid().toString());
         pushData.put("click_action", !StringUtils.isEmpty(request.getClick_action()) ? request.getClick_action() : defaultsProperties.getDefaults().get("click_action"));
         pushData.put("route", !StringUtils.isEmpty(request.getRoute()) ? request.getRoute() : defaultsProperties.getDefaults().get("route"));
         return pushData;
     }
 
-/*    private PushNotificationRequest getCarPushNotificationRequest(Car c, PushNotificationRequest request) {
+    private PushNotificationRequest getEventPushNotificationRequest(CustomEvent c, PushNotificationRequest request) {
         return new PushNotificationRequest(
-                request.getCarid(),
-                !StringUtils.isEmpty(request.getTitle()) ? request.getTitle() : "We've got new car for you !",
-                !StringUtils.isEmpty(request.getBody()) ? request.getBody() : "The new " + c.getBrand() + " " + c.getModel() + " " + c.getYear() + " is now here! Click to see details",
-                !StringUtils.isEmpty(request.getImage()) ? request.getImage() : c.getBrandlogo(),
-                !StringUtils.isEmpty(request.getTopic()) ? request.getTopic() : defaults.get("topic"),
-                !StringUtils.isEmpty(request.getClick_action()) ? request.getClick_action() : defaults.get("click_action"),
-                !StringUtils.isEmpty(request.getRoute()) ? request.getRoute() : defaults.get("route"),
-                !StringUtils.isEmpty(request.getTag()) ? request.getTag() : defaults.get("tag"));
-    }*/
+                !StringUtils.isEmpty(request.getTitle()) ? request.getTitle() : "We've got new Event for you !",
+                !StringUtils.isEmpty(request.getBody()) ? request.getBody() : "Click to see details",
+                !StringUtils.isEmpty(request.getImage()) ? request.getImage() : c.getImage(),
+                !StringUtils.isEmpty(request.getTopic()) ? request.getTopic() : defaultsProperties.getDefaults().get("topic"),
+                !StringUtils.isEmpty(request.getClick_action()) ? request.getClick_action() : defaultsProperties.getDefaults().get("click_action"),
+                !StringUtils.isEmpty(request.getRoute()) ? request.getRoute() : defaultsProperties.getDefaults().get("route"),
+                !StringUtils.isEmpty(request.getTag()) ? request.getTag() : defaultsProperties.getDefaults().get("tag"));
+    }
 
     public void sendCustomPushNotification(PushNotificationRequest request) {
         try {
             createOrUpdateNotification(request, false);
             Map<String, String> map = new HashMap<>();
-            map.put("carid", request.getCarid().toString());
             map.put("click_action", request.getClick_action());
             map.put("route", request.getRoute());
             map.put("tag", request.getTag());
@@ -140,7 +137,6 @@ public class PushNotificationService {
                     newEntity.setTitle(request.getTitle().trim());
                     newEntity.setBody(request.getBody().trim());
                     newEntity.setImage(request.getImage());
-                    newEntity.setCarid(request.getCarid());
                     newEntity.setRoute(request.getRoute());
                     newEntity.setClick_action(request.getClick_action());
                     newEntity.setTopic(request.getTopic());

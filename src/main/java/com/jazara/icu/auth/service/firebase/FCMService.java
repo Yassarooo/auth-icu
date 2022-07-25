@@ -1,8 +1,9 @@
-package com.jazara.icu.auth.firebase;
+package com.jazara.icu.auth.service.firebase;
 
 
 import com.google.firebase.messaging.*;
-import com.jazara.icu.auth.payload.PushNotificationRequest;
+import com.jazara.icu.auth.payload.firebase.NotificationParameter;
+import com.jazara.icu.auth.payload.firebase.PushNotificationRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

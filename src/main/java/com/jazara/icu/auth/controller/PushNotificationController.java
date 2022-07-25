@@ -1,9 +1,9 @@
 package com.jazara.icu.auth.controller;
 
-import com.jazara.icu.auth.firebase.PushNotificationService;
-import com.jazara.icu.auth.payload.DefaultsProperties;
-import com.jazara.icu.auth.payload.PushNotificationRequest;
-import com.jazara.icu.auth.payload.PushNotificationResponse;
+import com.jazara.icu.auth.service.PushNotificationService;
+import com.jazara.icu.auth.config.DefaultsProperties;
+import com.jazara.icu.auth.payload.firebase.PushNotificationRequest;
+import com.jazara.icu.auth.payload.firebase.PushNotificationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

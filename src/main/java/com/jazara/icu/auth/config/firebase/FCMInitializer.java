@@ -1,4 +1,4 @@
-package com.jazara.icu.auth.firebase;
+package com.jazara.icu.auth.config.firebase;
 
 
 import com.google.auth.oauth2.GoogleCredentials;
@@ -16,7 +16,7 @@ import java.io.IOException;
 @Service
 public class FCMInitializer {
 
-    @Value("${app.firebase-configuration-file}")
+    @Value("/icu-project-abdc8-firebase-adminsdk-osgg9-73b7828113.json")
     private String firebaseConfigPath;
 
     Logger logger = LoggerFactory.getLogger(FCMInitializer.class);

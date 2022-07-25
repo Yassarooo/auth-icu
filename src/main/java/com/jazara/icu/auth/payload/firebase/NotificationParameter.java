@@ -1,4 +1,4 @@
-package com.jazara.icu.auth.firebase;
+package com.jazara.icu.auth.payload.firebase;
 
 public enum NotificationParameter {
     SOUND("default"),

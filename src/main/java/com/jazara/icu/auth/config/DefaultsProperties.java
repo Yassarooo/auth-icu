@@ -1,4 +1,4 @@
-package com.jazara.icu.auth.payload;
+package com.jazara.icu.auth.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package com.jazara.icu.auth.payload;
+package com.jazara.icu.auth.payload.firebase;
 
 public class PushNotificationResponse {
 

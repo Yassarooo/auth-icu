@@ -1,4 +1,4 @@
-package com.jazara.icu.auth.payload;
+package com.jazara.icu.auth.payload.firebase;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,8 +19,6 @@ public class PushNotificationRequest {
     private Long id;
 
     @Column
-    private Long carid;
-    @Column
     private String title;
     @Column
     private String body;
@@ -37,8 +35,7 @@ public class PushNotificationRequest {
     @Column
     private String tag;
 
-    public PushNotificationRequest(Long carid, String title, String body, String image, String topicName, String click_action, String route, String tag) {
-        this.id = carid;
+    public PushNotificationRequest( String title, String body, String image, String topicName, String click_action, String route, String tag) {
         this.title = title;
         this.body = body;
         this.image = image;
@@ -61,15 +58,6 @@ public class PushNotificationRequest {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-
-    public Long getCarid() {
-        return carid;
-    }
-
-    public void setCarid(Long carid) {
-        this.carid = carid;
     }
 
     public String getClick_action() {
