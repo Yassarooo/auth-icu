@@ -1,5 +1,6 @@
 package com.jazara.icu.auth.firebase;
 
+import com.jazara.icu.auth.payload.DefaultsProperties;
 import com.jazara.icu.auth.payload.PushNotificationRequest;
 import com.jazara.icu.auth.repository.PushNotificationRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -18,8 +19,9 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class PushNotificationService {
 
-    @Value("#{${app.notifications.defaults}}")
-    private Map<String, String> defaults;
+
+    @Autowired
+    private DefaultsProperties defaultsProperties;
 
     @Autowired
     PushNotificationRepository pushNotificationRepository;
@@ -61,8 +63,8 @@ public class PushNotificationService {
     private Map<String, String> getPayloadDataFromRequest(PushNotificationRequest request) {
         Map<String, String> pushData = new HashMap<>();
         pushData.put("carid", request.getCarid().toString());
-        pushData.put("click_action", !StringUtils.isEmpty(request.getClick_action()) ? request.getClick_action() : defaults.get("click_action"));
-        pushData.put("route", !StringUtils.isEmpty(request.getRoute()) ? request.getRoute() : defaults.get("route"));
+        pushData.put("click_action", !StringUtils.isEmpty(request.getClick_action()) ? request.getClick_action() : defaultsProperties.getDefaults().get("click_action"));
+        pushData.put("route", !StringUtils.isEmpty(request.getRoute()) ? request.getRoute() : defaultsProperties.getDefaults().get("route"));
         return pushData;
     }
 
@@ -102,19 +104,19 @@ public class PushNotificationService {
 
     private Map<String, String> getSamplePayloadData() {
         Map<String, String> pushData = new HashMap<>();
-        pushData.put("carid", defaults.get("carid"));
-        pushData.put("click_action", defaults.get("click_action"));
-        pushData.put("route", defaults.get("route"));
+        pushData.put("carid", defaultsProperties.getDefaults().get("carid"));
+        pushData.put("click_action", defaultsProperties.getDefaults().get("click_action"));
+        pushData.put("route", defaultsProperties.getDefaults().get("route"));
         return pushData;
     }
 
 
     private PushNotificationRequest getSamplePushNotificationRequest() {
         PushNotificationRequest request = new PushNotificationRequest(
-                defaults.get("title"),
-                defaults.get("body"),
-                defaults.get("image"),
-                defaults.get("topic"));
+                defaultsProperties.getDefaults().get("title"),
+                defaultsProperties.getDefaults().get("body"),
+                defaultsProperties.getDefaults().get("image"),
+                defaultsProperties.getDefaults().get("topic"));
         return request;
     }
 
