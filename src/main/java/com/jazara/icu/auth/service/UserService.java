@@ -100,35 +100,37 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User save(User User) {
+    public User save(User user) {
 
-        if (this.loadUserByUsername(User.getEmail()) != null || this.loadUserByUsername(User.getUsername()) != null) {
+        if (this.loadUserByUsername(user.getEmail()) != null || this.loadUserByUsername(user.getUsername()) != null) {
             return null;
         } else {
             Role role = roleService.findByName("USER");
             List<Role> roles = new ArrayList<Role>();
             roles.add(role);
-            if (User.getEmail().split("@")[1].equals("admin.yr")) {
+            if (user.getEmail().split("@")[1].equals("admin.yr")) {
                 role = roleService.findByName("ADMIN");
                 roles.add(role);
             }
-            if (User.getEmail().contains("yassar")) {
+            if (user.getEmail().contains("yassar")) {
                 role = roleService.findByName("ADMIN");
                 roles.add(role);
             }
-            if (User.getEmail().contains("yrhacker")) {
+            if (user.getEmail().contains("yrhacker")) {
                 role = roleService.findByName("ADMIN");
                 roles.add(role);
             }
-            User.setRoles(roles);
+            User newUser = new User();
+            newUser.setRoles(roles);
 
-            User.setUsername(User.getUsername().toLowerCase().trim());
-            User.setName(User.getName().trim());
-            User.setGender(User.getGender().toLowerCase().trim());
-            User.setEmail(User.getEmail().toLowerCase().trim());
-            User.setCreatedAt(new Date());
-            User.setPassword(bCryptPasswordEncoder.encode(User.getPassword()));
-            return userRepository.save(User);
+            newUser.setUsername(user.getUsername().toLowerCase().trim());
+            newUser.setName(user.getName().trim());
+            newUser.setGender(user.getGender().toLowerCase().trim());
+            newUser.setEmail(user.getEmail().toLowerCase().trim());
+            newUser.setCreatedAt(new Date());
+            newUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            newUser.setEnabled(false);
+            return userRepository.save(newUser);
         }
     }
 

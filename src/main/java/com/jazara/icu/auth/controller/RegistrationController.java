@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.Authentication;
@@ -149,6 +150,16 @@ public class RegistrationController {
         try {
             userService.deleteAllUsers();
             return customResponse.HandleResponse(true, "deleted all users", "", HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/getAll")
+    public ResponseEntity<?> GetAllUsers() throws Exception {
+        try {
+            return customResponse.HandleResponse(true, "", userService.getAllUsers(), HttpStatus.OK);
         } catch (Exception e) {
             return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
         }
