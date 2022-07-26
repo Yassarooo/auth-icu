@@ -1,13 +1,14 @@
 package com.jazara.icu.auth.controller;
 
 
-import com.jazara.icu.auth.domain.Branch;
 import com.jazara.icu.auth.domain.Cam;
 import com.jazara.icu.auth.service.CamService;
+import com.jazara.icu.auth.service.CustomResponse;
 import com.jazara.icu.auth.service.ProduceCamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -25,46 +26,60 @@ public class CamController {
     @Autowired
     ProduceCamService produceCamService;
 
+    @Autowired
+    CustomResponse customResponse;
+
     @PostMapping(value = "/add")
-    public ResponseEntity<String> createRoom(@RequestBody Cam cam) {
+    public ResponseEntity<Map<String, Object>> createRoom(@RequestBody Cam cam) {
         final Cam c = camService.createCam(cam);
         if (c == null) {
-            return new ResponseEntity<String>("cannot", HttpStatus.INTERNAL_SERVER_ERROR);
+            return customResponse.HandleResponse(false, "cannot add cam", "", HttpStatus.OK);
         }
         produceCamService.produceMessage(c.getUrl());
-        return new ResponseEntity<String>("success", HttpStatus.OK);
+        return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
     }
 
     @PutMapping(value = "/edit/{id}")
-    public ResponseEntity<String> editRoom(@PathVariable Long id, @RequestBody Cam cam) {
+    public ResponseEntity<Map<String, Object>> editRoom(@PathVariable Long id, @RequestBody Cam cam) {
         Cam c = camService.editCam(cam);
         if (c == null) {
-            return new ResponseEntity<String>("cannot", HttpStatus.BAD_REQUEST);
+            return customResponse.HandleResponse(false, "cannot edit cam", "", HttpStatus.OK);
         }
-        return new ResponseEntity<String>("success", HttpStatus.OK);
+        return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
     }
 
     @GetMapping(value = "/all/{id}")
     public ResponseEntity<?> getCamsByRoomID(@PathVariable Long id) {
-        Map<String, Object> tokenMap = new HashMap<String, Object>();
+        Map<String, Object> camMap = new HashMap<String, Object>();
         final ArrayList<Cam> cams = camService.getCamsByRoomId(id);
-        tokenMap.put("cams", cams);
-        return new ResponseEntity<Map<String, Object>>(tokenMap, HttpStatus.OK);
+        camMap.put("cams", cams);
+        return customResponse.HandleResponse(true, "", camMap, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Optional<Cam>> getCam(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> getCam(@PathVariable Long id) {
         final Optional<Cam> c = camService.getCamById(id);
         if (!c.isPresent()) {
-            return new ResponseEntity<Optional<Cam>>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return customResponse.HandleResponse(false, "cam not found", "", HttpStatus.OK);
         }
-        return new ResponseEntity<Optional<Cam>>(c, HttpStatus.OK);
+        return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> deleteCam(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> deleteCam(@PathVariable Long id) {
         if (camService.deleteCamById(id))
-            return new ResponseEntity<String>("success", HttpStatus.OK);
-        return new ResponseEntity<String>("cannot", HttpStatus.UNAUTHORIZED);
+            return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
+        return customResponse.HandleResponse(true, "cannot delete cam", "", HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/deleteAll")
+    public ResponseEntity<?> DeleteAllCams() throws Exception {
+        try {
+            camService.deleteAllCams();
+            return customResponse.HandleResponse(true, "deleted all cams", "", HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+        }
     }
 }

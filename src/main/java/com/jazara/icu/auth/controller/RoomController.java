@@ -8,6 +8,7 @@ import com.jazara.icu.auth.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class RoomController {
         if (r == null) {
             return customResponse.HandleResponse(false, "cannot add room", "", HttpStatus.OK);
         }
-        return customResponse.HandleResponse(false, "", r, HttpStatus.OK);
+        return customResponse.HandleResponse(true, "", r, HttpStatus.OK);
     }
 
     @PutMapping(value = "/edit/{id}")
@@ -64,5 +65,16 @@ public class RoomController {
         if (roomService.deleteRoomById(id))
             return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
         return customResponse.HandleResponse(false, "cannot delete room", "", HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/deleteAll")
+    public ResponseEntity<?> DeleteAllRooms() throws Exception {
+        try {
+            roomService.deleteAllRooms();
+            return customResponse.HandleResponse(true, "deleted all rooms", "", HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+        }
     }
 }

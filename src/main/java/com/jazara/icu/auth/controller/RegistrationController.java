@@ -145,7 +145,9 @@ public class RegistrationController {
         return customResponse.HandleResponse(false, "used email or username", "", HttpStatus.OK);
     }
 
-    @PostMapping("/deleteAll")
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/deleteAll")
     public ResponseEntity<?> DeleteAllUsers() throws Exception {
         try {
             userService.deleteAllUsers();
@@ -156,7 +158,7 @@ public class RegistrationController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/getAll")
+    @GetMapping("/getAll")
     public ResponseEntity<?> GetAllUsers() throws Exception {
         try {
             return customResponse.HandleResponse(true, "", userService.getAllUsers(), HttpStatus.OK);

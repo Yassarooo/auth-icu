@@ -6,6 +6,7 @@ import com.jazara.icu.auth.service.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -63,5 +64,17 @@ public class BranchController {
         if (branchService.deleteBranchById(id))
             return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
         return customResponse.HandleResponse(false, "cannot delete branch", "", HttpStatus.OK);
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping(value = "/deleteAll")
+    public ResponseEntity<Map<String, Object>> deleteAllBranches() {
+        try {
+            branchService.deleteAllBranches();
+            return customResponse.HandleResponse(true, "deleted all branches", "", HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+        }
     }
 }

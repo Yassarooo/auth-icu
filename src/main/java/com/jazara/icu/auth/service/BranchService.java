@@ -66,8 +66,10 @@ public class BranchService {
         return false;
     }
 
-    public void deleteAllBranches() {
+    public void deleteAllBranches() throws Exception {
         if (userService.isAdmin())
             branchRepository.deleteAll();
+        else
+            throw new Exception("UNAUTHORIZED");
     }
 }

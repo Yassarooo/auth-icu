@@ -6,6 +6,7 @@ import com.jazara.icu.auth.service.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -67,5 +68,16 @@ public class PersonController {
         if (personService.deletePersonById(id))
             return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
         return customResponse.HandleResponse(false, "cannot delete person", "", HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/deleteAll")
+    public ResponseEntity<?> DeleteAllPersons() throws Exception {
+        try {
+            personService.deleteAllPersons();
+            return customResponse.HandleResponse(true, "deleted all persons", "", HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+        }
     }
 }
