@@ -21,6 +21,22 @@ public class RoleService {
         return role;
     }
 
+    public void Initialize() {
+        if (roleRepository.count() < 1) {
+            return;
+        } else {
+            Role uRole = new Role();
+            uRole.setName("USER");
+            uRole.setDescription("USER Role (Only Manage owned account)");
+            CreateRole(uRole);
+            Role aRole = new Role();
+            aRole.setName("ADMIN");
+            aRole.setDescription("ADMIN Role (Manage users)");
+            CreateRole(aRole);
+        }
+    }
+
+
     public void deleteAllRoles() {
         roleRepository.deleteAll();
     }

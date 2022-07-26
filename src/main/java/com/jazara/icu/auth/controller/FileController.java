@@ -1,6 +1,5 @@
 package com.jazara.icu.auth.controller;
 
-
 import com.jazara.icu.auth.domain.Person;
 import com.jazara.icu.auth.payload.UploadFileResponse;
 import com.jazara.icu.auth.service.CustomResponse;

@@ -117,11 +117,11 @@ public class RegistrationController {
 
     // activation
     @PostMapping(value = "/activate")
-    public ResponseEntity<String> activateUserAccount(@RequestBody String email) {
+    public ResponseEntity<Map<String, Object>> activateUserAccount(@RequestBody String email) {
         User u = userService.ActivateUser(email);
         if (u == null)
-            return new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
-        return new ResponseEntity<String>("success", HttpStatus.OK);
+            return customResponse.HandleResponse(false, "", "", HttpStatus.OK);
+        return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
     }
 
     @PostMapping(value = "/changePassword")
