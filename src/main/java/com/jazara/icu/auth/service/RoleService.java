@@ -22,7 +22,7 @@ public class RoleService {
     }
 
     public void Initialize() {
-        if (roleRepository.count() < 1) {
+        if (roleRepository.count() > 1) {
             return;
         } else {
             Role uRole = new Role();

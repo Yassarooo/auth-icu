@@ -113,7 +113,7 @@ public class RegistrationController {
             return customResponse.HandleResponse(false, "couldn't register account", "", HttpStatus.OK);
         }
         LOGGER.info("registered account : " + registered.getEmail());
-        return customResponse.HandleResponse(true, "", registered.getEmail(), HttpStatus.OK);
+        return customResponse.HandleResponse(true, "", registered, HttpStatus.OK);
     }
 
     // activation
