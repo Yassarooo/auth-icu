@@ -1,5 +1,7 @@
 package com.jazara.icu.auth.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -29,6 +31,7 @@ public class Cam {
     private Room room;
 
     @Column
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Long> persons;
 
     public long getId() {
