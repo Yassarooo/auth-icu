@@ -34,6 +34,12 @@ public class Person {
     @JsonIgnore
     private User owner;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "cam_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Cam cam;
+
     @NotNull
     @Column
     private String name;
@@ -55,6 +61,10 @@ public class Person {
 
     @Column
     private String imageLink;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private Map<Date, Boolean> attendancehistory = new HashMap<Date, Boolean>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
@@ -160,5 +170,13 @@ public class Person {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Map<Date, Boolean> getAttendancehistory() {
+        return attendancehistory;
+    }
+
+    public void setAttendancehistory(Map<Date, Boolean> attendancehistory) {
+        this.attendancehistory = attendancehistory;
     }
 }

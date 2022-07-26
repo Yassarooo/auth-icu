@@ -4,6 +4,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "cams")
@@ -26,6 +27,9 @@ public class Cam {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Room room;
+
+    @Column
+    private List<Long> persons;
 
     public long getId() {
         return id;
@@ -65,6 +69,14 @@ public class Cam {
 
     public void setRoom(Room room) {
         this.room = room;
+    }
+
+    public List<Long> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(List<Long> persons) {
+        this.persons = persons;
     }
 }
 
