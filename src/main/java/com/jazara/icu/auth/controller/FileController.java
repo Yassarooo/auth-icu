@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequestMapping("/api/files")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class FileController {
 

@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class RegistrationController {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
