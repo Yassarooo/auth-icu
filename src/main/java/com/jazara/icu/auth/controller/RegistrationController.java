@@ -1,6 +1,7 @@
 package com.jazara.icu.auth.controller;
 
 import com.jazara.icu.auth.domain.User;
+import com.jazara.icu.auth.payload.LoginRequest;
 import com.jazara.icu.auth.service.CustomResponse;
 import com.jazara.icu.auth.service.JwtTokenUtil;
 import com.jazara.icu.auth.service.UserService;
@@ -41,19 +42,19 @@ public class RegistrationController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestParam String username, @RequestParam String password) throws Exception {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) throws Exception {
 
         Map<String, Object> tokenMap = new HashMap<String, Object>();
         try {
-            userService.authenticate(username, password);
+            userService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
         } catch (DisabledException e) {
             return customResponse.HandleResponse(false, "Please Activate Your Account", "", HttpStatus.UNAUTHORIZED);
         } catch (BadCredentialsException e) {
             return customResponse.HandleResponse(false, "Incorrect Email or Password", "", HttpStatus.UNAUTHORIZED);
         }
 
-        final UserDetails userDetails = userService.loadUserByUsername(username);
-        User appUser = userService.findUserByUsername(username);
+        final UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
+        User appUser = userService.findUserByUsername(loginRequest.getUsername());
         if (appUser == null) {
             return customResponse.HandleResponse(false, "There is no account with given username or email", "", HttpStatus.UNAUTHORIZED);
         }
