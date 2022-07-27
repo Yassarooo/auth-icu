@@ -3,6 +3,7 @@ package com.jazara.icu.auth.service;
 import com.jazara.icu.auth.domain.Cam;
 import com.jazara.icu.auth.domain.Department;
 import com.jazara.icu.auth.domain.Room;
+import com.jazara.icu.auth.domain.User;
 import com.jazara.icu.auth.repository.CamRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -103,4 +105,16 @@ public class CamService {
         if (userService.isAdmin())
             camRepository.deleteAll();
     }
+
+
+    public List<Cam> getAllCams() {
+        List<Cam> camsList = (List<Cam>) camRepository.findAll();
+
+        if (camsList.size() > 0) {
+            return camsList;
+        } else {
+            return new ArrayList<Cam>();
+        }
+    }
+
 }

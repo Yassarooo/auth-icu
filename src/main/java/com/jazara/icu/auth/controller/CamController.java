@@ -93,4 +93,13 @@ public class CamController {
             return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
         }
     }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<?> GetAllCams() throws Exception {
+        try {
+            return customResponse.HandleResponse(true, "", camService.getAllCams(), HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+        }
+    }
 }
