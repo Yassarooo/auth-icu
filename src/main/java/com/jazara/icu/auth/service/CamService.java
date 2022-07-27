@@ -29,32 +29,32 @@ public class CamService {
     @Autowired
     private UserService userService;
 
-    public Cam createCam(Cam cam) {
+    public Cam createCam(Cam cam) throws Exception {
         Optional<Room> r = roomService.getRoomById(cam.getRoom_id());
         if (!r.isPresent())
-            return null;
+            throw new Exception("room not found");
         Department d = roomService.getDepByRoomId(cam.getRoom_id());
         if (d == null)
-            return null;
+            throw new Exception("dep not found");
         if (d.getBranch() != null && (d.getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin())) {
             cam.setRoom(r.get());
             return camRepository.save(cam);
         }
-        return null;
+        throw new Exception("branch not found | unauthorized");
     }
 
     @Transactional
-    public Cam editCam(Cam cam) {
+    public Cam editCam(Cam cam) throws Exception {
         Optional<Room> r = roomService.getRoomById(cam.getRoom_id());
         if (!r.isPresent())
-            return null;
+            throw new Exception("room not found");
         Department d = roomService.getDepByRoomId(cam.getRoom_id());
         if (d == null)
-            return null;
+            throw new Exception("dep not found");
         if (d.getBranch() != null && d.getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin()) {
             Optional<Cam> c = camRepository.findById(cam.getId());
             if (!c.isPresent())
-                return null;
+                throw new Exception("cam not found");
             Cam temp = c.get();
             temp.setName(cam.getName());
             temp.setUrl(cam.getUrl());
@@ -63,31 +63,31 @@ public class CamService {
             camRepository.save(temp);
             return temp;
         }
-        return null;
+        throw new Exception("branch not found | unauthorized");
     }
 
-    public ArrayList<Cam> getCamsByRoomId(Long id) {
+    public ArrayList<Cam> getCamsByRoomId(Long id) throws Exception {
         Optional<Room> r = roomService.getRoomById(id);
         if (!r.isPresent())
-            return null;
+            throw new Exception("room not found");
         Department d = roomService.getDepByRoomId(id);
         if (d == null)
-            return null;
+            throw new Exception("dep not found");
         if (d.getBranch() != null && (d.getBranch().getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin())) {
             return camRepository.findAllByRoom_id(id);
         }
         return new ArrayList<Cam>();
     }
 
-    public Optional<Cam> getCamById(Long id) {
+    public Optional<Cam> getCamById(Long id) throws Exception {
         Optional<Cam> c = camRepository.findById(id);
         if (!c.isPresent()) {
-            return null;
+            throw new Exception("cam not found");
         }
         return c;
     }
 
-    public Boolean deleteCamById(Long id) {
+    public Boolean deleteCamById(Long id) throws Exception {
         Optional<Cam> c = camRepository.findById(id);
         if (c.isPresent()) {
             Cam temp = c.get();
@@ -96,7 +96,7 @@ public class CamService {
                 return true;
             }
         }
-        return false;
+        throw new Exception("cam not found");
     }
 
     public void deleteAllCams() {

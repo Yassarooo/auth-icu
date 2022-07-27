@@ -2,7 +2,6 @@ package com.jazara.icu.auth.controller;
 
 import com.jazara.icu.auth.domain.Person;
 import com.jazara.icu.auth.payload.UploadFileResponse;
-import com.jazara.icu.auth.service.CustomResponse;
 import com.jazara.icu.auth.service.FileStorageService;
 import com.jazara.icu.auth.service.PersonService;
 import org.slf4j.Logger;
@@ -34,8 +33,6 @@ public class FileController {
     private FileStorageService fileStorageService;
     @Autowired
     private PersonService personService;
-    @Autowired
-    private CustomResponse customResponse;
 
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestPart("file") MultipartFile file) {

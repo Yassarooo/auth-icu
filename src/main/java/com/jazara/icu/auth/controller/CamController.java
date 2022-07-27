@@ -30,51 +30,62 @@ public class CamController {
     CustomResponse customResponse;
 
     @PostMapping(value = "/add")
-    public ResponseEntity<Map<String, Object>> createRoom(@RequestBody Cam cam) {
-        final Cam c = camService.createCam(cam);
-        if (c == null) {
-            return customResponse.HandleResponse(false, "cannot add cam", "", HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> createCam(@RequestBody Cam cam) {
+        try {
+            final Cam c = camService.createCam(cam);
+            produceCamService.produceMessage(c.getUrl());
+            return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
         }
-        produceCamService.produceMessage(c.getUrl());
-        return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
     }
 
     @PutMapping(value = "/edit/{id}")
-    public ResponseEntity<Map<String, Object>> editRoom(@PathVariable Long id, @RequestBody Cam cam) {
-        Cam c = camService.editCam(cam);
-        if (c == null) {
-            return customResponse.HandleResponse(false, "cannot edit cam", "", HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> editCam(@PathVariable Long id, @RequestBody Cam cam) {
+        try {
+            Cam c = camService.editCam(cam);
+            return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
         }
-        return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
     }
 
     @GetMapping(value = "/all/{id}")
     public ResponseEntity<?> getCamsByRoomID(@PathVariable Long id) {
-        Map<String, Object> camMap = new HashMap<String, Object>();
-        final ArrayList<Cam> cams = camService.getCamsByRoomId(id);
-        camMap.put("cams", cams);
-        return customResponse.HandleResponse(true, "", camMap, HttpStatus.OK);
+        try {
+            Map<String, Object> camMap = new HashMap<String, Object>();
+            final ArrayList<Cam> cams = camService.getCamsByRoomId(id);
+            camMap.put("cams", cams);
+            return customResponse.HandleResponse(true, "", camMap, HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+        }
+
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Map<String, Object>> getCam(@PathVariable Long id) {
-        final Optional<Cam> c = camService.getCamById(id);
-        if (!c.isPresent()) {
-            return customResponse.HandleResponse(false, "cam not found", "", HttpStatus.OK);
+        try {
+            final Optional<Cam> c = camService.getCamById(id);
+            return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
         }
-        return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Map<String, Object>> deleteCam(@PathVariable Long id) {
-        if (camService.deleteCamById(id))
+        try {
+            camService.deleteCamById(id);
             return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
-        return customResponse.HandleResponse(true, "cannot delete cam", "", HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+        }
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/deleteAll")
-    public ResponseEntity<?> DeleteAllCams() throws Exception {
+    public ResponseEntity<?> DeleteAllCams() {
         try {
             camService.deleteAllCams();
             return customResponse.HandleResponse(true, "deleted all cams", "", HttpStatus.OK);
