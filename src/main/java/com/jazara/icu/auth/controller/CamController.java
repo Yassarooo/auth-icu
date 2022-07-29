@@ -34,9 +34,9 @@ public class CamController {
         try {
             final Cam c = camService.createCam(cam);
             produceCamService.produceMessage(c.getUrl());
-            return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
+            return customResponse.HandleResponse(true, null, c, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
     }
 
@@ -44,9 +44,9 @@ public class CamController {
     public ResponseEntity<Map<String, Object>> editCam(@PathVariable Long id, @RequestBody Cam cam) {
         try {
             Cam c = camService.editCam(cam);
-            return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
+            return customResponse.HandleResponse(true, null, c, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
     }
 
@@ -56,9 +56,9 @@ public class CamController {
             Map<String, Object> camMap = new HashMap<String, Object>();
             final ArrayList<Cam> cams = camService.getCamsByRoomId(id);
             camMap.put("cams", cams);
-            return customResponse.HandleResponse(true, "", camMap, HttpStatus.OK);
+            return customResponse.HandleResponse(true, null, camMap, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
 
     }
@@ -67,9 +67,9 @@ public class CamController {
     public ResponseEntity<Map<String, Object>> getCam(@PathVariable Long id) {
         try {
             final Optional<Cam> c = camService.getCamById(id);
-            return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
+            return customResponse.HandleResponse(true, null, c, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
     }
 
@@ -77,9 +77,9 @@ public class CamController {
     public ResponseEntity<Map<String, Object>> deleteCam(@PathVariable Long id) {
         try {
             camService.deleteCamById(id);
-            return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
+            return customResponse.HandleResponse(true, null, null, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
     }
 
@@ -88,18 +88,18 @@ public class CamController {
     public ResponseEntity<?> DeleteAllCams() {
         try {
             camService.deleteAllCams();
-            return customResponse.HandleResponse(true, "deleted all cams", "", HttpStatus.OK);
+            return customResponse.HandleResponse(true, "deleted all cams", null, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
     }
 
     @GetMapping("/getAll")
     public ResponseEntity<?> GetAllCams() throws Exception {
         try {
-            return customResponse.HandleResponse(true, "", camService.getAllCams(), HttpStatus.OK);
+            return customResponse.HandleResponse(true, null, camService.getAllCams(), HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
     }
 }

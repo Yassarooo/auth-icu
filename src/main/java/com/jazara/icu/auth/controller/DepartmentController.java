@@ -29,18 +29,18 @@ public class DepartmentController {
     public ResponseEntity<?> createDep(@RequestBody Department dep) {
         final Department d = departmentService.createDepartment(dep);
         if (d == null) {
-            return customResponse.HandleResponse(false, "cannot add department", "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, "cannot add department", null, HttpStatus.OK);
         }
-        return customResponse.HandleResponse(true, "", d, HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, d, HttpStatus.OK);
     }
 
     @PutMapping(value = "/edit/{id}")
     public ResponseEntity<?> editDep(@PathVariable Long id, @RequestBody Department dep) {
         Department d = departmentService.editDepartment(dep);
         if (d == null) {
-            return customResponse.HandleResponse(false, "cannot edit department", "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, "cannot edit department", null, HttpStatus.OK);
         }
-        return customResponse.HandleResponse(true, "", d, HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, d, HttpStatus.OK);
     }
 
     @GetMapping(value = "/all/{id}")
@@ -48,23 +48,23 @@ public class DepartmentController {
         Map<String, Object> tokenMap = new HashMap<String, Object>();
         final ArrayList<Department> deps = departmentService.getDepartmentsByBranchId(id);
         tokenMap.put("deps", deps);
-        return customResponse.HandleResponse(true, "", tokenMap, HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, tokenMap, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getDep(@PathVariable Long id) {
         final Optional<Department> d = departmentService.getDepartmentById(id);
         if (!d.isPresent()) {
-            return customResponse.HandleResponse(false, "not found", "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, "not found", null, HttpStatus.OK);
         }
-        return customResponse.HandleResponse(true, "", d, HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, d, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteDep(@PathVariable Long id) {
         if (departmentService.deleteDepartmentById(id))
             return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
-        return customResponse.HandleResponse(false, "cannot delete department", "", HttpStatus.OK);
+        return customResponse.HandleResponse(false, "cannot delete department", null, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -72,9 +72,9 @@ public class DepartmentController {
     public ResponseEntity<?> DeleteAllDeps() throws Exception {
         try {
             departmentService.deleteAllDepartments();
-            return customResponse.HandleResponse(true, "deleted all deps", "", HttpStatus.OK);
+            return customResponse.HandleResponse(true, "deleted all deps", null, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
     }
 }

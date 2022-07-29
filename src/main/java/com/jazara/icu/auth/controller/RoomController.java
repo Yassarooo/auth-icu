@@ -30,18 +30,18 @@ public class RoomController {
     public ResponseEntity<?> createRoom(@RequestBody Room room) {
         final Room r = roomService.createRoom(room);
         if (r == null) {
-            return customResponse.HandleResponse(false, "cannot add room", "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, "cannot add room", null, HttpStatus.OK);
         }
-        return customResponse.HandleResponse(true, "", r, HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, r, HttpStatus.OK);
     }
 
     @PutMapping(value = "/edit/{id}")
     public ResponseEntity<?> editRoom(@PathVariable Long id, @RequestBody Room room) {
         Room r = roomService.editRoom(room);
         if (r == null) {
-            return customResponse.HandleResponse(false, "cannot edit room", "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, "cannot edit room", null, HttpStatus.OK);
         }
-        return customResponse.HandleResponse(true, "", r, HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, r, HttpStatus.OK);
     }
 
     @GetMapping(value = "/all/{id}")
@@ -49,23 +49,23 @@ public class RoomController {
         Map<String, Object> tokenMap = new HashMap<String, Object>();
         final ArrayList<Room> rooms = roomService.getRoomsByDepId(id);
         tokenMap.put("rooms", rooms);
-        return customResponse.HandleResponse(true, "", tokenMap, HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, tokenMap, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getRoom(@PathVariable Long id) {
         final Optional<Room> r = roomService.getRoomById(id);
         if (!r.isPresent()) {
-            return customResponse.HandleResponse(false, "not found", "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, "not found", null, HttpStatus.OK);
         }
-        return customResponse.HandleResponse(true, "", r, HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, r, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteRoom(@PathVariable Long id) {
         if (roomService.deleteRoomById(id))
-            return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
-        return customResponse.HandleResponse(false, "cannot delete room", "", HttpStatus.OK);
+            return customResponse.HandleResponse(true, null, null, HttpStatus.OK);
+        return customResponse.HandleResponse(false, "cannot delete room", null, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -73,9 +73,9 @@ public class RoomController {
     public ResponseEntity<?> DeleteAllRooms() throws Exception {
         try {
             roomService.deleteAllRooms();
-            return customResponse.HandleResponse(true, "deleted all rooms", "", HttpStatus.OK);
+            return customResponse.HandleResponse(true, "deleted all rooms", null, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
     }
 }

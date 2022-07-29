@@ -59,7 +59,7 @@ public class RegistrationController {
                 resultTokenMap.put("token", token);
                 resultTokenMap.put("user", appUser);
 
-                return customResponse.HandleResponse(true, "", resultTokenMap, HttpStatus.OK);
+                return customResponse.HandleResponse(true, null, resultTokenMap, HttpStatus.OK);
             } else {
                 return customResponse.HandleResponse(false, "Invalid Token", null, HttpStatus.UNAUTHORIZED);
             }
@@ -75,7 +75,7 @@ public class RegistrationController {
             if (jwtTokenUtil.isTokenExpired(token))
                 return customResponse.HandleResponse(false, "Expired Token", null, HttpStatus.UNAUTHORIZED);
             else {
-                return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
+                return customResponse.HandleResponse(true, null, null, HttpStatus.OK);
             }
         } catch (ExpiredJwtException e) {
             return customResponse.HandleResponse(false, "Expired Token", null, HttpStatus.UNAUTHORIZED);
@@ -88,13 +88,13 @@ public class RegistrationController {
     public ResponseEntity<Map<String, Object>> getLoggedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String loggedUsername = auth.getName();
-        return customResponse.HandleResponse(true, "", userService.findUserByUsername(loggedUsername), HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, userService.findUserByUsername(loggedUsername), HttpStatus.OK);
     }
 
     //get logged in user id
     @GetMapping("/current")
     public ResponseEntity<Map<String, Object>> getLoggedUserID() {
-        return customResponse.HandleResponse(true, "", userService.getLoggedUserId(), HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, userService.getLoggedUserId(), HttpStatus.OK);
     }
 
     // Registration
@@ -107,7 +107,7 @@ public class RegistrationController {
             return customResponse.HandleResponse(false, "couldn't register account", null, HttpStatus.OK);
         }
         LOGGER.info("registered account : " + registered.getEmail());
-        return customResponse.HandleResponse(true, "", registered, HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, registered, HttpStatus.OK);
     }
 
     // activation
@@ -115,15 +115,15 @@ public class RegistrationController {
     public ResponseEntity<Map<String, Object>> activateUserAccount(@RequestBody String email) {
         User u = userService.ActivateUser(email);
         if (u == null)
-            return customResponse.HandleResponse(false, "", null, HttpStatus.OK);
-        return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, null, null, HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, null, HttpStatus.OK);
     }
 
     @PostMapping(value = "/changePassword")
     public ResponseEntity<?> ChangeUserPass(@RequestBody String newPass) throws Exception {
         try {
             userService.changeUserPassword(newPass);
-            return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
+            return customResponse.HandleResponse(true, null, null, HttpStatus.OK);
         } catch (Exception e) {
             return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
@@ -134,7 +134,7 @@ public class RegistrationController {
     @PostMapping("/checkusername")
     public ResponseEntity<?> checkUsernameOrEmail(@RequestParam String username) {
         if (userService.loadUserByUsername(username) == null)
-            return customResponse.HandleResponse(true, "not used", "", HttpStatus.OK);
+            return customResponse.HandleResponse(true, "not used", null, HttpStatus.OK);
         else if (userService.loadUserByUsername(username) != null) ;
         return customResponse.HandleResponse(false, "used email or username", null, HttpStatus.OK);
     }
@@ -145,7 +145,7 @@ public class RegistrationController {
     public ResponseEntity<?> DeleteAllUsers() throws Exception {
         try {
             userService.deleteAllUsers();
-            return customResponse.HandleResponse(true, "deleted all users", "", HttpStatus.OK);
+            return customResponse.HandleResponse(true, "deleted all users", null, HttpStatus.OK);
         } catch (Exception e) {
             return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
@@ -155,7 +155,7 @@ public class RegistrationController {
     @GetMapping("/getAll")
     public ResponseEntity<?> GetAllUsers() throws Exception {
         try {
-            return customResponse.HandleResponse(true, "", userService.getAllUsers(), HttpStatus.OK);
+            return customResponse.HandleResponse(true, null, userService.getAllUsers(), HttpStatus.OK);
         } catch (Exception e) {
             return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }

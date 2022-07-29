@@ -29,18 +29,18 @@ public class PersonController {
     public ResponseEntity<Map<String, Object>> createPerson(@RequestBody Person person) {
         final Person b = personService.createPerson(person);
         if (b == null) {
-            return customResponse.HandleResponse(false, "error creating person", "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, "error creating person", null, HttpStatus.OK);
         }
-        return customResponse.HandleResponse(true, "", b, HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, b, HttpStatus.OK);
     }
 
     @PutMapping(value = "/edit/{id}")
     public ResponseEntity<Map<String, Object>> editPerson(@PathVariable Long id, @RequestBody Person person) {
         Person b = personService.editPerson(person);
         if (b == null) {
-            return customResponse.HandleResponse(false, "error updating person info", "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, "error updating person info", null, HttpStatus.OK);
         }
-        return customResponse.HandleResponse(true, "", b, HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, b, HttpStatus.OK);
     }
 
     @GetMapping(value = "/user/{id}")
@@ -49,9 +49,9 @@ public class PersonController {
             Map<String, Object> tokenMap = new HashMap<String, Object>();
             final ArrayList<Person> persons = personService.getPersonsByOwnerId(id);
             tokenMap.put("persons", persons);
-            return customResponse.HandleResponse(true, "", tokenMap, HttpStatus.OK);
+            return customResponse.HandleResponse(true, null, tokenMap, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
     }
 
@@ -59,16 +59,16 @@ public class PersonController {
     public ResponseEntity<Map<String, Object>> getPerson(@PathVariable Long id) {
         final Optional<Person> b = personService.getPersonById(id);
         if (!b.isPresent()) {
-            return customResponse.HandleResponse(false, "person not found", "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, "person not found", null, HttpStatus.OK);
         }
-        return customResponse.HandleResponse(true, "", b, HttpStatus.OK);
+        return customResponse.HandleResponse(true, null, b, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Map<String, Object>> deletePerson(@PathVariable Long id) {
         if (personService.deletePersonById(id))
-            return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
-        return customResponse.HandleResponse(false, "cannot delete person", "", HttpStatus.OK);
+            return customResponse.HandleResponse(true, null, null, HttpStatus.OK);
+        return customResponse.HandleResponse(false, "cannot delete person", null, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -76,9 +76,9 @@ public class PersonController {
     public ResponseEntity<?> DeleteAllPersons() throws Exception {
         try {
             personService.deleteAllPersons();
-            return customResponse.HandleResponse(true, "deleted all persons", "", HttpStatus.OK);
+            return customResponse.HandleResponse(true, "deleted all persons", null, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
     }
 }
