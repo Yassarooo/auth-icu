@@ -50,11 +50,14 @@ public class UserService implements UserDetailsService {
 
     public Authentication authenticate(String username, String password) throws Exception {
         try {
+            if (!findUserByUsername(username).isEnabled()) {
+                throw new Exception("Please Activate your account");
+            }
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
+            throw new Exception("Please Activate your account", e);
         } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
+            throw new Exception("Incorrect Email or Password", e);
         }
     }
 
@@ -125,7 +128,7 @@ public class UserService implements UserDetailsService {
 
             newUser.setUsername(user.getUsername().toLowerCase().trim());
             newUser.setName(user.getName().trim());
-            newUser.setGender(user.getGender().toLowerCase().trim());
+            newUser.setGender(user.getGender());
             newUser.setEmail(user.getEmail().toLowerCase().trim());
             newUser.setCreatedAt(new Date());
             newUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -154,7 +157,7 @@ public class UserService implements UserDetailsService {
             user.setEmail(u.getEmail().toLowerCase().trim());
             user.setPhonenumber(u.getPhonenumber());
             user.setDob(u.getDob());
-            user.setGender(u.getGender().trim());
+            user.setGender(u.getGender());
             user.setRoles(u.getRoles());
             user.setUpdatedAt(new Date());
 

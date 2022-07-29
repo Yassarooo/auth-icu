@@ -47,10 +47,8 @@ public class RegistrationController {
         Map<String, Object> tokenMap = new HashMap<String, Object>();
         try {
             userService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
-        } catch (DisabledException e) {
-            return customResponse.HandleResponse(false, "Please Activate Your Account", "", HttpStatus.UNAUTHORIZED);
-        } catch (BadCredentialsException e) {
-            return customResponse.HandleResponse(false, "Incorrect Email or Password", "", HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.UNAUTHORIZED);
         }
 
         final UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());

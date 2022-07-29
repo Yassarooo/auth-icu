@@ -38,8 +38,8 @@ public class User implements UserDetails {
     @Email(message = "Email should be valid")
     @Column(unique = true)
     private String email;
-    @Column
-    private String gender;
+
+    private Gender gender;
     @Column
     private String phonenumber;
     @JsonProperty(access = Access.WRITE_ONLY)
@@ -66,7 +66,11 @@ public class User implements UserDetails {
     private Account_Type acctype;
 
     public enum Account_Type {
-        Facebook,Google,Guest
+        Facebook, Google, Guest
+    }
+
+    public enum Gender {
+        Male, Female, Other
     }
 
     @Override
@@ -131,12 +135,12 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public String getGender() {
-        return gender;
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public Gender getGender() {
+        return gender;
     }
 
     public String getPhonenumber() {
