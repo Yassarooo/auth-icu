@@ -106,10 +106,10 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User save(User user) {
+    public User save(User user) throws Exception {
 
         if (this.loadUserByUsername(user.getEmail()) != null || this.loadUserByUsername(user.getUsername()) != null) {
-            return null;
+            throw new Exception("Account Exists, Please Login to continue");
         } else {
             Role role = roleService.findByName("USER");
             List<Role> roles = new ArrayList<Role>();
@@ -210,11 +210,11 @@ public class UserService implements UserDetailsService {
         return auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
-    public User ActivateUser(final String email) {
+    public User ActivateUser(final String email) throws Exception {
         User u = findUserByUsername(email);
         if (u == null) {
             LOGGER.info("User not found");
-            return null;
+            throw new Exception("User not found");
         }
         u.setEnabled(true);
         return userRepository.save(u);

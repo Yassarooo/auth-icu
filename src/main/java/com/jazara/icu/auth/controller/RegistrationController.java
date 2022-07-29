@@ -99,24 +99,29 @@ public class RegistrationController {
 
     // Registration
     @PostMapping("/register")
-    public ResponseEntity<Map<String, Object>> registerUserAccount(@RequestBody User accountDto) {
+    public ResponseEntity<Map<String, Object>> registerUserAccount(@RequestBody User accountDto) throws Exception {
         LOGGER.debug("Registering user account with information: {}", accountDto);
+        try {
 
-        final User registered = userService.save(accountDto);
-        if (registered == null) {
-            return customResponse.HandleResponse(false, "couldn't register account", null, HttpStatus.OK);
+            final User registered = userService.save(accountDto);
+            LOGGER.info("registered account : " + registered.getEmail());
+            return customResponse.HandleResponse(true, null, registered, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
-        LOGGER.info("registered account : " + registered.getEmail());
-        return customResponse.HandleResponse(true, null, registered, HttpStatus.OK);
     }
 
     // activation
     @PostMapping(value = "/activate")
-    public ResponseEntity<Map<String, Object>> activateUserAccount(@RequestBody String email) {
-        User u = userService.ActivateUser(email);
-        if (u == null)
-            return customResponse.HandleResponse(false, null, null, HttpStatus.OK);
-        return customResponse.HandleResponse(true, null, null, HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> activateUserAccount(@RequestBody String email) throws Exception {
+        try {
+            User u = userService.ActivateUser(email);
+            return customResponse.HandleResponse(true, null, null, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
+        }
     }
 
     @PostMapping(value = "/changePassword")
