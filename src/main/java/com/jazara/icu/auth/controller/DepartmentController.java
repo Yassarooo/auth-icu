@@ -74,7 +74,7 @@ public class DepartmentController {
             departmentService.deleteAllDepartments();
             return customResponse.HandleResponse(true, "deleted all deps", "", HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
         }
     }
 }

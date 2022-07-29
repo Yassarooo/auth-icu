@@ -36,7 +36,7 @@ public class CamController {
             produceCamService.produceMessage(c.getUrl());
             return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
         }
     }
 
@@ -46,7 +46,7 @@ public class CamController {
             Cam c = camService.editCam(cam);
             return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
         }
     }
 
@@ -58,7 +58,7 @@ public class CamController {
             camMap.put("cams", cams);
             return customResponse.HandleResponse(true, "", camMap, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
         }
 
     }
@@ -69,7 +69,7 @@ public class CamController {
             final Optional<Cam> c = camService.getCamById(id);
             return customResponse.HandleResponse(true, "", c, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
         }
     }
 
@@ -79,7 +79,7 @@ public class CamController {
             camService.deleteCamById(id);
             return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
         }
     }
 
@@ -90,7 +90,7 @@ public class CamController {
             camService.deleteAllCams();
             return customResponse.HandleResponse(true, "deleted all cams", "", HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
         }
     }
 
@@ -99,7 +99,7 @@ public class CamController {
         try {
             return customResponse.HandleResponse(true, "", camService.getAllCams(), HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
         }
     }
 }

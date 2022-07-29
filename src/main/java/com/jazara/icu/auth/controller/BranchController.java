@@ -75,7 +75,7 @@ public class BranchController {
             branchService.deleteAllBranches();
             return customResponse.HandleResponse(true, "deleted all branches", "", HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
         }
     }
 }

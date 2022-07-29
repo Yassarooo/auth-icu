@@ -51,7 +51,7 @@ public class PersonController {
             tokenMap.put("persons", persons);
             return customResponse.HandleResponse(true, "", tokenMap, HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
         }
     }
 
@@ -78,7 +78,7 @@ public class PersonController {
             personService.deleteAllPersons();
             return customResponse.HandleResponse(true, "deleted all persons", "", HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
         }
     }
 }

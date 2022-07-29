@@ -47,18 +47,10 @@ public class RegistrationController {
         Map<String, Object> tokenMap = new HashMap<String, Object>();
         try {
             userService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
-        } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.UNAUTHORIZED);
-        }
 
-        final UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
-        User appUser = userService.findUserByUsername(loginRequest.getUsername());
-        if (appUser == null) {
-            return customResponse.HandleResponse(false, "There is no account with given username or email", "", HttpStatus.UNAUTHORIZED);
-        }
-        if (!appUser.isEnabled()) {
-            return customResponse.HandleResponse(false, "Please Activate Your Account", "", HttpStatus.UNAUTHORIZED);
-        } else {
+            final UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
+
+            User appUser = userService.findUserByUsername(loginRequest.getUsername());
             final String token = jwtTokenUtil.generateToken(userDetails);
 
             Map<String, Object> resultTokenMap = new HashMap<String, Object>();
@@ -69,8 +61,10 @@ public class RegistrationController {
 
                 return customResponse.HandleResponse(true, "", resultTokenMap, HttpStatus.OK);
             } else {
-                return customResponse.HandleResponse(false, "Invalid Token", "", HttpStatus.UNAUTHORIZED);
+                return customResponse.HandleResponse(false, "Invalid Token", null, HttpStatus.UNAUTHORIZED);
             }
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -79,12 +73,12 @@ public class RegistrationController {
         Map<String, Object> tokenMap = new HashMap<String, Object>();
         try {
             if (jwtTokenUtil.isTokenExpired(token))
-                return customResponse.HandleResponse(false, "Expired Token", "", HttpStatus.UNAUTHORIZED);
+                return customResponse.HandleResponse(false, "Expired Token", null, HttpStatus.UNAUTHORIZED);
             else {
                 return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
             }
         } catch (ExpiredJwtException e) {
-            return customResponse.HandleResponse(false, "Expired Token", "", HttpStatus.UNAUTHORIZED);
+            return customResponse.HandleResponse(false, "Expired Token", null, HttpStatus.UNAUTHORIZED);
         }
 
     }
@@ -110,7 +104,7 @@ public class RegistrationController {
 
         final User registered = userService.save(accountDto);
         if (registered == null) {
-            return customResponse.HandleResponse(false, "couldn't register account", "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, "couldn't register account", null, HttpStatus.OK);
         }
         LOGGER.info("registered account : " + registered.getEmail());
         return customResponse.HandleResponse(true, "", registered, HttpStatus.OK);
@@ -121,7 +115,7 @@ public class RegistrationController {
     public ResponseEntity<Map<String, Object>> activateUserAccount(@RequestBody String email) {
         User u = userService.ActivateUser(email);
         if (u == null)
-            return customResponse.HandleResponse(false, "", "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, "", null, HttpStatus.OK);
         return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
     }
 
@@ -131,7 +125,7 @@ public class RegistrationController {
             userService.changeUserPassword(newPass);
             return customResponse.HandleResponse(true, "", "", HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
 
     }
@@ -142,7 +136,7 @@ public class RegistrationController {
         if (userService.loadUserByUsername(username) == null)
             return customResponse.HandleResponse(true, "not used", "", HttpStatus.OK);
         else if (userService.loadUserByUsername(username) != null) ;
-        return customResponse.HandleResponse(false, "used email or username", "", HttpStatus.OK);
+        return customResponse.HandleResponse(false, "used email or username", null, HttpStatus.OK);
     }
 
 
@@ -153,7 +147,7 @@ public class RegistrationController {
             userService.deleteAllUsers();
             return customResponse.HandleResponse(true, "deleted all users", "", HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
     }
 
@@ -163,7 +157,7 @@ public class RegistrationController {
         try {
             return customResponse.HandleResponse(true, "", userService.getAllUsers(), HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
     }
 

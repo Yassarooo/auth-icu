@@ -50,7 +50,10 @@ public class UserService implements UserDetailsService {
 
     public Authentication authenticate(String username, String password) throws Exception {
         try {
-            if (!findUserByUsername(username).isEnabled()) {
+            User u = findUserByUsername(username);
+            if (u == null) {
+                throw new Exception("Account Not Registered");
+            } else if (!u.isEnabled()) {
                 throw new Exception("Please Activate your account");
             }
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));

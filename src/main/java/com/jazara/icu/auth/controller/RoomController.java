@@ -75,7 +75,7 @@ public class RoomController {
             roomService.deleteAllRooms();
             return customResponse.HandleResponse(true, "deleted all rooms", "", HttpStatus.OK);
         } catch (Exception e) {
-            return customResponse.HandleResponse(false, e.toString(), "", HttpStatus.OK);
+            return customResponse.HandleResponse(false, e.getMessage(), "", HttpStatus.OK);
         }
     }
 }
