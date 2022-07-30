@@ -50,14 +50,14 @@ public class PushNotificationService {
         }
     }
 
-    public void sendEventPushNotification(CustomEvent event, PushNotificationRequest request) {
+/*    public void sendEventPushNotification(CustomEvent event, PushNotificationRequest request) {
         try {
             createOrUpdateNotification(getEventPushNotificationRequest(event, request), false);
             fcmService.sendMessage(getPayloadDataFromRequest(request), getEventPushNotificationRequest(event, request));
         } catch (InterruptedException | ExecutionException e) {
             logger.error(e.getMessage());
         }
-    }
+    }*/
 
     private Map<String, String> getPayloadDataFromRequest(PushNotificationRequest request) {
         Map<String, String> pushData = new HashMap<>();
@@ -66,6 +66,7 @@ public class PushNotificationService {
         return pushData;
     }
 
+/*
     private PushNotificationRequest getEventPushNotificationRequest(CustomEvent c, PushNotificationRequest request) {
         return new PushNotificationRequest(
                 !StringUtils.isEmpty(request.getTitle()) ? request.getTitle() : "We've got new Event for you !",
@@ -76,6 +77,7 @@ public class PushNotificationService {
                 !StringUtils.isEmpty(request.getRoute()) ? request.getRoute() : defaultsProperties.getDefaults().get("route"),
                 !StringUtils.isEmpty(request.getTag()) ? request.getTag() : defaultsProperties.getDefaults().get("tag"));
     }
+*/
 
     public void sendCustomPushNotification(PushNotificationRequest request) {
         try {
