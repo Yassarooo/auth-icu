@@ -136,6 +136,7 @@ public class UserService implements UserDetailsService {
             newUser.setCreatedAt(new Date());
             newUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             newUser.setEnabled(false);
+            newUser.setAppToken(user.getAppToken());
             return userRepository.save(newUser);
         }
     }

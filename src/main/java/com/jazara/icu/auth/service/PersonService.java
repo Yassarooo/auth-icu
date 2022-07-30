@@ -21,8 +21,7 @@ public class PersonService {
 
     public Person createPerson(Person person) {
         person.setOwner(userService.getUserByID(userService.getLoggedUserId()).get());
-        person = personRepository.save(person);
-        return person;
+        return personRepository.save(person);
     }
 
     @Transactional
@@ -37,6 +36,7 @@ public class PersonService {
             temp.setPosition(person.getPosition());
             temp.setPhonenumber(person.getPhonenumber());
             temp.setDob(person.getDob());
+            temp.setFaceFeatures(person.getFaceFeatures());
             personRepository.save(temp);
             return temp;
         }

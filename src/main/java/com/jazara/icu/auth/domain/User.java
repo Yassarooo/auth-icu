@@ -39,6 +39,9 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
+    @Column
+    private String appToken;
+
     private Gender gender;
     @Column
     private String phonenumber;
@@ -202,5 +205,13 @@ public class User implements UserDetails {
 
     public void setAcctype(Account_Type acctype) {
         this.acctype = acctype;
+    }
+
+    public String getAppToken() {
+        return appToken;
+    }
+
+    public void setAppToken(String appToken) {
+        this.appToken = appToken;
     }
 }

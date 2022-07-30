@@ -35,12 +35,13 @@ public class PersonController {
     }
 
     @PutMapping(value = "/edit/{id}")
-    public ResponseEntity<Map<String, Object>> editPerson(@PathVariable Long id, @RequestBody Person person) {
-        Person b = personService.editPerson(person);
-        if (b == null) {
-            return customResponse.HandleResponse(false, "error updating person info", null, HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> editPerson(@PathVariable Long id, @RequestBody Person person) throws Exception {
+        try {
+            Person b = personService.editPerson(person);
+            return customResponse.HandleResponse(true, null, b, HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
-        return customResponse.HandleResponse(true, null, b, HttpStatus.OK);
     }
 
     @GetMapping(value = "/user/{id}")

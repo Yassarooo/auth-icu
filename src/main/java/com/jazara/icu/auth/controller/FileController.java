@@ -57,7 +57,7 @@ public class FileController {
     }
 
     @PostMapping("/uploadPersonimage")
-    public UploadFileResponse uploadPersonImage(@RequestPart("image") MultipartFile file, @RequestHeader Long id) {
+    public UploadFileResponse uploadPersonImage(@RequestPart("image") MultipartFile file, @RequestHeader Long id, @RequestHeader List<Double> face) {
         String fileName = fileStorageService.storeFile(file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -68,20 +68,27 @@ public class FileController {
         Optional<Person> person = personService.getPersonById(id);
         Person p = person.get();
         p.setImageLink(fileDownloadUri);
-        personService.editPerson(p);
+        p.setFaceFeatures(face);
+        try {
+            personService.editPerson(p);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return new UploadFileResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
 
     }
 
+/*
     @PostMapping("/uploadPersonimages")
-    public List<UploadFileResponse> uploadPersonImages(@RequestParam("images") MultipartFile[] files, @RequestHeader Long id) {
+    public List<UploadFileResponse> uploadPersonImages(@RequestParam("images") MultipartFile[] files, @RequestHeader Long id, @RequestHeader List<>) {
         return Arrays.asList(files)
                 .stream()
                 .map(file -> uploadPersonImage(file, id))
                 .collect(Collectors.toList());
     }
+*/
 
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
