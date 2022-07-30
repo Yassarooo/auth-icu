@@ -2,13 +2,13 @@ package com.jazara.icu.auth.service;
 
 
 import com.jazara.icu.auth.domain.Person;
+import com.jazara.icu.auth.domain.User;
 import com.jazara.icu.auth.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PersonService {
@@ -26,24 +26,36 @@ public class PersonService {
     }
 
     @Transactional
-    public Person editPerson(Person person) {
+    public Person editPerson(Person person) throws Exception {
         Optional<Person> p = personRepository.findById(person.getId());
         if (p.isPresent()) {
             Person temp = p.get();
-            if ((temp.getOwner().getId().equals(userService.getLoggedUserId())) || userService.isAdmin()) {
-                temp.setName(person.getName().trim());
-                temp.setAge(person.getAge());
-                temp.setGender(person.getGender());
-                temp.setImageLink(person.getImageLink());
-                temp.setPosition(person.getPosition());
-                temp.setPhonenumber(person.getPhonenumber());
-                temp.setDob(person.getDob());
-                personRepository.save(temp);
-                return temp;
-            }
+            temp.setName(person.getName().trim());
+            temp.setAge(person.getAge());
+            temp.setGender(person.getGender());
+            temp.setImageLink(person.getImageLink());
+            temp.setPosition(person.getPosition());
+            temp.setPhonenumber(person.getPhonenumber());
+            temp.setDob(person.getDob());
+            personRepository.save(temp);
+            return temp;
         }
-        return null;
+        throw new Exception("person not found ");
     }
+
+    @Transactional
+    public void updateAttendanceHistory(Person person) throws Exception {
+        Optional<Person> p = personRepository.findById(person.getId());
+        if (p.isPresent()) {
+            Person temp = p.get();
+            Date now = new Date();
+            Map<Date, Boolean> history = temp.getAttendancehistory();
+            history.put(now, true);
+            personRepository.save(temp);
+        } else
+            throw new Exception("person not found ");
+    }
+
 
     public ArrayList<Person> getPersonsByOwnerId(Long id) throws Exception {
         if (id.equals(userService.getLoggedUserId()) || userService.isAdmin())
@@ -67,6 +79,17 @@ public class PersonService {
         }
         return false;
     }
+
+    public List<Person> getAllPersons() {
+        List<Person> personsList = (List<Person>) personRepository.findAll();
+
+        if (personsList.size() > 0) {
+            return personsList;
+        } else {
+            return new ArrayList<Person>();
+        }
+    }
+
 
     public void deleteAllPersons() {
         if (userService.isAdmin())

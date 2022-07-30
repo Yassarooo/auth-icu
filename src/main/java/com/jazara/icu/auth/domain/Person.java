@@ -48,7 +48,7 @@ public class Person {
     private Integer age;
 
     @Column
-    private String gender;
+    private User.Gender gender;
 
     @Column
     private String phonenumber;
@@ -68,7 +68,7 @@ public class Person {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
-    private List<String> faceFeatures = new ArrayList<String>();
+    private List<Double> faceFeatures = new ArrayList<Double>();
 
     @CreatedDate
     private Date createdAt;
@@ -108,11 +108,11 @@ public class Person {
         this.age = age;
     }
 
-    public String getGender() {
+    public User.Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(User.Gender gender) {
         this.gender = gender;
     }
 
@@ -148,11 +148,19 @@ public class Person {
         this.imageLink = imageLink;
     }
 
-    public List<String> getFaceFeatures() {
+    public Cam getCam() {
+        return cam;
+    }
+
+    public void setCam(Cam cam) {
+        this.cam = cam;
+    }
+
+    public List<Double> getFaceFeatures() {
         return faceFeatures;
     }
 
-    public void setFaceFeatures(List<String> faceFeatures) {
+    public void setFaceFeatures(List<Double> faceFeatures) {
         this.faceFeatures = faceFeatures;
     }
 

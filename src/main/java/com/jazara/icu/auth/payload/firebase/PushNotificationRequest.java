@@ -54,6 +54,9 @@ public class PushNotificationRequest {
         this.topic = topic;
     }
 
+    public PushNotificationRequest() {
+    }
+
     public Long getId() {
         return id;
     }

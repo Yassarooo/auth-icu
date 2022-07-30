@@ -1,7 +1,6 @@
 package com.jazara.icu.auth.service;
 
 import com.jazara.icu.auth.config.DefaultsProperties;
-import com.jazara.icu.auth.domain.CustomEvent;
 import com.jazara.icu.auth.payload.firebase.PushNotificationRequest;
 import com.jazara.icu.auth.repository.PushNotificationRepository;
 import com.jazara.icu.auth.service.firebase.FCMService;
