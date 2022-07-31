@@ -51,7 +51,7 @@ public class FaceService {
                 personService.updateAttendanceHistory(checkedPerson);
             }
         }
-        PushNotificationRequest pushNotificationRequest = new PushNotificationRequest("","click to see","image link","all");
+        PushNotificationRequest pushNotificationRequest = new PushNotificationRequest("", "click to see", "image link", "all");
         pushNotificationRequest.setToken(faceRequest.getAppToken());
         if (faceRequest.getFall()) {
             pushNotificationRequest.setTitle("fall");
