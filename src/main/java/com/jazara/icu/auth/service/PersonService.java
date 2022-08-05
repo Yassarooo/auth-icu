@@ -32,11 +32,9 @@ public class PersonService {
             temp.setName(person.getName().trim());
             temp.setAge(person.getAge());
             temp.setGender(person.getGender());
-            temp.setImageLink(person.getImageLink());
             temp.setPosition(person.getPosition());
             temp.setPhonenumber(person.getPhonenumber());
             temp.setDob(person.getDob());
-            temp.setFaceFeatures(person.getFaceFeatures());
             personRepository.save(temp);
             return temp;
         }
