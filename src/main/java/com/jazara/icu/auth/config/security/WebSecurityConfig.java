@@ -58,13 +58,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity
+        httpSecurity.cors().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 .authorizeRequests().antMatchers("/", "/webjars/**", "/swagger-resources/**", "/v2/**", "/swagger-ui/**", "/swagger-ui.html", "/actuator/**", "/registration/**", "/index.html", "/app/**", "/api/cam/getAll", "/api/auth/**", "/favicon.ico", "/actuator/**", "/metrics/**").permitAll()
                 .anyRequest().authenticated().and();
-        
-        httpSecurity.cors().disable();
+
         httpSecurity.csrf().disable();
         // Add a filter to validate the tokens with every request
         httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
