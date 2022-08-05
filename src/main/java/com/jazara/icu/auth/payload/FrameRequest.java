@@ -11,7 +11,7 @@ public class FrameRequest {
 
     private Boolean fire;
 
-    private Boolean violance;
+    private Boolean violence;
 
     private Boolean fall;
 
@@ -41,12 +41,12 @@ public class FrameRequest {
         this.fire = fire;
     }
 
-    public Boolean getViolance() {
-        return violance;
+    public Boolean getViolence() {
+        return violence;
     }
 
-    public void setViolance(Boolean violance) {
-        this.violance = violance;
+    public void setViolence(Boolean violence) {
+        this.violence = violence;
     }
 
     public Boolean getFall() {

@@ -67,8 +67,8 @@ public class AiService {
                 pushNotificationRequest.setTitle("Fire");
                 pushNotificationService.sendPushNotificationToToken(pushNotificationRequest);
             }
-            if (frameRequest.getViolance()) {
-                pushNotificationRequest.setTitle("Violance");
+            if (frameRequest.getViolence()) {
+                pushNotificationRequest.setTitle("Violence");
                 pushNotificationService.sendPushNotificationToToken(pushNotificationRequest);
             }
         });
