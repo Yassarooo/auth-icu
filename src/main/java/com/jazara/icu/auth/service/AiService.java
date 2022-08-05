@@ -4,7 +4,7 @@ package com.jazara.icu.auth.service;
 import com.jazara.icu.auth.domain.Cam;
 import com.jazara.icu.auth.domain.Person;
 import com.jazara.icu.auth.domain.User;
-import com.jazara.icu.auth.payload.FaceRequest;
+import com.jazara.icu.auth.payload.FrameRequest;
 import com.jazara.icu.auth.payload.firebase.PushNotificationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.Optional;
 import static java.lang.Math.abs;
 
 @Service
-public class FaceService {
+public class AiService {
 
     @Autowired
     private PersonService personService;
@@ -28,10 +28,11 @@ public class FaceService {
     @Autowired
     private PushNotificationService pushNotificationService;
 
-    public List<Person> addFaces(FaceRequest faceRequest) throws Exception {
+    public List<Person> processFrame(FrameRequest frameRequest) throws Exception {
         List<Person> addedPersons = new ArrayList<Person>();
-        Optional<Cam> cam = camService.getCamById(faceRequest.getCamid());
-        for (List<Double> face : faceRequest.getFaces()) {
+        Optional<Cam> cam = camService.getCamById(frameRequest.getCamid());
+        User u = cam.get().getRoom().getDep().getBranch().getOwner();
+        for (List<Double> face : frameRequest.getFaces()) {
             Person checkedPerson = checkFaceExistance(face);
             Person p = new Person();
             if (checkedPerson == null) {
@@ -52,23 +53,25 @@ public class FaceService {
             }
         }
         PushNotificationRequest pushNotificationRequest = new PushNotificationRequest("", "click to see", "image link", "all");
-        pushNotificationRequest.setToken(faceRequest.getAppToken());
-        if (faceRequest.getFall()) {
-            pushNotificationRequest.setTitle("fall");
-            pushNotificationService.sendPushNotificationToToken(pushNotificationRequest);
-        }
-        if (faceRequest.getMotion()) {
-            pushNotificationRequest.setTitle("motion");
-            pushNotificationService.sendPushNotificationToToken(pushNotificationRequest);
-        }
-        if (faceRequest.getFire()) {
-            pushNotificationRequest.setTitle("Fire");
-            pushNotificationService.sendPushNotificationToToken(pushNotificationRequest);
-        }
-        if (faceRequest.getViolance()) {
-            pushNotificationRequest.setTitle("Violance");
-            pushNotificationService.sendPushNotificationToToken(pushNotificationRequest);
-        }
+        u.getDevIdToToken().forEach((k, v) -> {
+            pushNotificationRequest.setToken(v);
+            if (frameRequest.getFall()) {
+                pushNotificationRequest.setTitle("fall");
+                pushNotificationService.sendPushNotificationToToken(pushNotificationRequest);
+            }
+            if (frameRequest.getMotion()) {
+                pushNotificationRequest.setTitle("motion");
+                pushNotificationService.sendPushNotificationToToken(pushNotificationRequest);
+            }
+            if (frameRequest.getFire()) {
+                pushNotificationRequest.setTitle("Fire");
+                pushNotificationService.sendPushNotificationToToken(pushNotificationRequest);
+            }
+            if (frameRequest.getViolance()) {
+                pushNotificationRequest.setTitle("Violance");
+                pushNotificationService.sendPushNotificationToToken(pushNotificationRequest);
+            }
+        });
         return addedPersons;
     }
 

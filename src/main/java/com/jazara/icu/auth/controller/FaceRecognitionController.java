@@ -1,8 +1,8 @@
 package com.jazara.icu.auth.controller;
 
 import com.jazara.icu.auth.domain.Person;
-import com.jazara.icu.auth.payload.FaceRequest;
-import com.jazara.icu.auth.service.FaceService;
+import com.jazara.icu.auth.payload.FrameRequest;
+import com.jazara.icu.auth.service.AiService;
 import com.jazara.icu.auth.service.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,12 +20,12 @@ public class FaceRecognitionController {
     CustomResponse customResponse;
 
     @Autowired
-    private FaceService faceService;
+    private AiService aiService;
 
     @PostMapping(value = "/newfaces")
-    public ResponseEntity<Map<String, Object>> createPerson(@RequestBody FaceRequest faceRequest) throws Exception {
+    public ResponseEntity<Map<String, Object>> addFrameRequest(@RequestBody FrameRequest frameRequest) throws Exception {
         try {
-            return customResponse.HandleResponse(true, null, faceService.addFaces(faceRequest), HttpStatus.OK);
+            return customResponse.HandleResponse(true, null, aiService.processFrame(frameRequest), HttpStatus.OK);
         } catch (Exception e) {
             return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
 
@@ -35,7 +35,7 @@ public class FaceRecognitionController {
     @PostMapping(value = "/search")
     public ResponseEntity<Map<String, Object>> SearchByFace(@RequestBody List<Double> face) throws Exception {
         try {
-            Person p = faceService.checkFaceExistance(face);
+            Person p = aiService.checkFaceExistance(face);
             if (p != null)
                 return customResponse.HandleResponse(true, null, p, HttpStatus.OK);
             else

@@ -3,13 +3,11 @@ package com.jazara.icu.auth.payload;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
-public class FaceRequest {
+public class FrameRequest {
     @NotBlank
     private Long camid;
 
     private List<List<Double>> faces;
-
-    private String appToken;
 
     private Boolean fire;
 
@@ -67,11 +65,4 @@ public class FaceRequest {
         this.motion = motion;
     }
 
-    public String getAppToken() {
-        return appToken;
-    }
-
-    public void setAppToken(String appToken) {
-        this.appToken = appToken;
-    }
 }
