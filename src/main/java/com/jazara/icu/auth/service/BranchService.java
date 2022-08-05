@@ -44,7 +44,7 @@ public class BranchService {
     }
 
     public ArrayList<Branch> getBranchesByOwnerId(Long id) {
-        if (id.equals(userService.getLoggedUserId()))
+        if (id.equals(userService.getLoggedUserId()) || userService.isAdmin())
             return branchRepository.findAllByOwner_Id(id);
         return new ArrayList<Branch>();
     }
