@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Optional;
 
 @RequestMapping("/api/room")
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class RoomController {
 

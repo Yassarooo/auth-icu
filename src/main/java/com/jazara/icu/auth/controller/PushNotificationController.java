@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/api/notification")
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class PushNotificationController {
 
