@@ -85,6 +85,7 @@ public class CamController {
     public ResponseEntity<Map<String, Object>> DeleteAllCams() {
         try {
             camService.deleteAllCams();
+            produceCamService.produceMessage("refresh");
             return customResponse.HandleResponse(true, "deleted all cams", null, HttpStatus.OK);
         } catch (Exception e) {
             return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
