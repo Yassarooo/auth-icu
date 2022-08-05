@@ -1,5 +1,6 @@
 package com.jazara.icu.auth;
 
+import com.jazara.icu.auth.config.security.CorsFilter;
 import com.jazara.icu.auth.domain.Role;
 import com.jazara.icu.auth.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
@@ -38,13 +40,12 @@ public class AuthApplication implements CommandLineRunner {
     RoleService roleService;
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*");
-            }
-        };
+    public FilterRegistrationBean filterRegistrationBean(){
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean(new CorsFilter());
+        registrationBean.setName("CORS FIlter");
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.setOrder(1);
+        return registrationBean;
     }
 
     @Override
