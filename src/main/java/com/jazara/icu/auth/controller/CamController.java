@@ -11,10 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RequestMapping("/api/cam")
 @RestController
@@ -97,7 +94,8 @@ public class CamController {
     @GetMapping("/getAll")
     public ResponseEntity<?> GetAllCams() throws Exception {
         try {
-            return customResponse.HandleResponse(true, null, camService.getAllCams(), HttpStatus.OK);
+            List<Cam> camList = camService.getAllCams();
+            return customResponse.HandleResponse(true, null, camList, HttpStatus.OK);
         } catch (Exception e) {
             return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
         }
