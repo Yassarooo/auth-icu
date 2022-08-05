@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RequestMapping("/api/ai")
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class FaceRecognitionController {
 
