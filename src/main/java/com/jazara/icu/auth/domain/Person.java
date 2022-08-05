@@ -34,11 +34,8 @@ public class Person {
     @JsonIgnore
     private User owner;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "cam_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Cam cam;
+    @Column
+    private Long detectedBycamId;
 
     @NotNull
     @Column
@@ -148,12 +145,12 @@ public class Person {
         this.imageLink = imageLink;
     }
 
-    public Cam getCam() {
-        return cam;
+    public Long getDetectedBycamId() {
+        return detectedBycamId;
     }
 
-    public void setCam(Cam cam) {
-        this.cam = cam;
+    public void setDetectedBycamId(Long detectedBycamId) {
+        this.detectedBycamId = detectedBycamId;
     }
 
     public List<Double> getFaceFeatures() {
