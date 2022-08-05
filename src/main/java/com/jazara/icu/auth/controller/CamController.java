@@ -48,7 +48,7 @@ public class CamController {
     }
 
     @GetMapping(value = "/all/{id}")
-    public ResponseEntity<?> getCamsByRoomID(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> getCamsByRoomID(@PathVariable Long id) {
         try {
             Map<String, Object> camMap = new HashMap<String, Object>();
             final ArrayList<Cam> cams = camService.getCamsByRoomId(id);
@@ -82,7 +82,7 @@ public class CamController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/deleteAll")
-    public ResponseEntity<?> DeleteAllCams() {
+    public ResponseEntity<Map<String, Object>> DeleteAllCams() {
         try {
             camService.deleteAllCams();
             return customResponse.HandleResponse(true, "deleted all cams", null, HttpStatus.OK);
@@ -92,7 +92,7 @@ public class CamController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<?> GetAllCams() throws Exception {
+    public ResponseEntity<Map<String, Object>> GetAllCams() throws Exception {
         try {
             List<Cam> camList = camService.getAllCams();
             return customResponse.HandleResponse(true, null, camList, HttpStatus.OK);
