@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.Arrays;
 
@@ -25,6 +26,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -36,9 +38,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtFilter jwtFilter;
-
-    @Autowired
-    private SimpleCORSFilter simpleCORSFilter;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -59,12 +58,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity.cors(withDefaults())
-                .sessionManagement().sessionCreationPolicy( SessionCreationPolicy.STATELESS ).and()
-                .exceptionHandling().authenticationEntryPoint( jwtAuthenticationEntryPoint ).and()
-                .authorizeRequests().antMatchers("/","/webjars/**","/swagger-resources/**","/v2/**","/swagger-ui/**","/swagger-ui.html","/actuator/**", "/registration/**", "/index.html", "/app/**","/api/cam/getAll","/api/auth/**", "/favicon.ico", "/actuator/**", "/metrics/**").permitAll()
+        httpSecurity
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
+                .authorizeRequests().antMatchers("/", "/webjars/**", "/swagger-resources/**", "/v2/**", "/swagger-ui/**", "/swagger-ui.html", "/actuator/**", "/registration/**", "/index.html", "/app/**", "/api/cam/getAll", "/api/auth/**", "/favicon.ico", "/actuator/**", "/metrics/**").permitAll()
                 .anyRequest().authenticated().and();
-
+        
+        httpSecurity.cors().disable();
         httpSecurity.csrf().disable();
         // Add a filter to validate the tokens with every request
         httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
