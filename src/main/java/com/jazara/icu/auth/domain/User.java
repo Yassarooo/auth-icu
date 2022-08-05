@@ -3,6 +3,8 @@ package com.jazara.icu.auth.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -39,8 +41,11 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
-    @Column
-    private String appToken;
+    @ElementCollection
+    @MapKeyColumn(name = "name")
+    @Column(name = "value")
+    @CollectionTable(name = "devIdToToken", joinColumns = @JoinColumn(name = "example_id"))
+    private Map<String, String> devIdToToken = new HashMap<String, String>();
 
     private Gender gender;
     @Column
@@ -207,11 +212,12 @@ public class User implements UserDetails {
         this.acctype = acctype;
     }
 
-    public String getAppToken() {
-        return appToken;
+
+    public Map<String, String> getDevIdToToken() {
+        return devIdToToken;
     }
 
-    public void setAppToken(String appToken) {
-        this.appToken = appToken;
+    public void setDevIdToToken(Map<String, String> devIdToToken) {
+        this.devIdToToken = devIdToToken;
     }
 }

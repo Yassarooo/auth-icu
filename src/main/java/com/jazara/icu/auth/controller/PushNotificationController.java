@@ -1,17 +1,21 @@
 package com.jazara.icu.auth.controller;
 
+import com.jazara.icu.auth.domain.User;
+import com.jazara.icu.auth.service.CustomResponse;
 import com.jazara.icu.auth.service.PushNotificationService;
 import com.jazara.icu.auth.config.DefaultsProperties;
 import com.jazara.icu.auth.payload.firebase.PushNotificationRequest;
 import com.jazara.icu.auth.payload.firebase.PushNotificationResponse;
+import com.jazara.icu.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
-@RequestMapping("/api")
+@RequestMapping("/api/notification")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class PushNotificationController {
@@ -20,23 +24,40 @@ public class PushNotificationController {
     private PushNotificationService pushNotificationService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CustomResponse customResponse;
+
+    @Autowired
     private DefaultsProperties defaultsProperties;
 
     public PushNotificationController(PushNotificationService pushNotificationService) {
         this.pushNotificationService = pushNotificationService;
     }
 
-    @PostMapping("/notification/topic")
+    @PostMapping("/topic")
     public ResponseEntity sendNotification(@RequestBody PushNotificationRequest request) {
         pushNotificationService.sendPushNotificationWithoutData(request);
         return new ResponseEntity<>(new PushNotificationResponse(HttpStatus.OK.value(), "Notification has been sent."), HttpStatus.OK);
     }
 
-    @PostMapping("/notification/token")
+    @PostMapping("/token")
     public ResponseEntity sendTokenNotification(@RequestBody PushNotificationRequest request) {
         pushNotificationService.sendPushNotificationToToken(request);
         return new ResponseEntity<>(new PushNotificationResponse(HttpStatus.OK.value(), "Notification has been sent."), HttpStatus.OK);
     }
+
+    @PostMapping("/updateToken")
+    public ResponseEntity<Map<String, Object>> updateTokenForUser(@RequestHeader String usernameOrEmail, @RequestHeader String appToken, @RequestHeader String devId) {
+        try {
+            User u = userService.updateTokenForUser(usernameOrEmail, appToken, devId);
+            return customResponse.HandleResponse(true, null, u, HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
+        }
+    }
+
 
 /*    @PostMapping("/notification/car")
     public ResponseEntity sendCarNotification(@RequestBody PushNotificationRequest pushRequest) {
@@ -49,13 +70,13 @@ public class PushNotificationController {
         }
     }*/
 
-    @PostMapping("/notification/data")
+    @PostMapping("/data")
     public ResponseEntity sendDataNotification(@RequestBody PushNotificationRequest pushRequest) {
         pushNotificationService.sendCustomPushNotification(pushRequest);
         return new ResponseEntity<>(new PushNotificationResponse(HttpStatus.OK.value(), "Notification has been sent."), HttpStatus.OK);
     }
 
-    @GetMapping("/notification")
+    @GetMapping("/")
     public ResponseEntity sendSampleNotification() {
 
         System.out.println(defaultsProperties.getDefaults().get("topic"));

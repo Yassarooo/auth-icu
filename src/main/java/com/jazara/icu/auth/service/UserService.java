@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -51,16 +49,12 @@ public class UserService implements UserDetailsService {
     public Authentication authenticate(String username, String password) throws Exception {
         try {
             User u = findUserByUsername(username);
-            if (u == null) {
-                throw new Exception("Account Not Registered");
-            } else if (!u.isEnabled()) {
+            if (!u.isEnabled()) {
                 throw new Exception("Please Activate your account");
             }
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            throw new Exception("Please Activate your account", e);
-        } catch (BadCredentialsException e) {
-            throw new Exception("Incorrect Email or Password", e);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
     }
 
@@ -100,8 +94,7 @@ public class UserService implements UserDetailsService {
             if (User != null) {
                 return User;
             } else {
-                System.err.println("Username Not Found");
-                return null;
+                throw new UsernameNotFoundException("Account Not Registered");
             }
         }
     }
@@ -136,7 +129,7 @@ public class UserService implements UserDetailsService {
             newUser.setCreatedAt(new Date());
             newUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             newUser.setEnabled(false);
-            newUser.setAppToken(user.getAppToken());
+            newUser.setDevIdToToken(user.getDevIdToToken());
             return userRepository.save(newUser);
         }
     }
@@ -212,13 +205,13 @@ public class UserService implements UserDetailsService {
     }
 
     public User ActivateUser(final String email) throws Exception {
-        User u = findUserByUsername(email);
-        if (u == null) {
-            LOGGER.info("User not found");
-            throw new Exception("User not found");
+        try {
+            User u = findUserByUsername(email);
+            u.setEnabled(true);
+            return userRepository.save(u);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
-        u.setEnabled(true);
-        return userRepository.save(u);
     }
 
 
@@ -234,6 +227,21 @@ public class UserService implements UserDetailsService {
         } else
             throw new Exception("no logged user");
     }
+
+
+    public User updateTokenForUser(String email, String appToken, String devId) throws Exception {
+        try {
+            User u = findUserByUsername(email);
+            Map<String, String> map = u.getDevIdToToken();
+            map.put(devId, appToken);
+            u.setDevIdToToken(map);
+            userRepository.save(u);
+            return u;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
 
     public boolean checkIfValidOldPassword(final User user, final String oldPassword) {
         return bCryptPasswordEncoder.matches(oldPassword, user.getPassword());

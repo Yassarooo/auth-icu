@@ -58,7 +58,6 @@ public class RegistrationController {
             if (token != null) {
                 resultTokenMap.put("token", token);
                 resultTokenMap.put("user", appUser);
-
                 return customResponse.HandleResponse(true, null, resultTokenMap, HttpStatus.OK);
             } else {
                 return customResponse.HandleResponse(false, "Invalid Token", null, HttpStatus.UNAUTHORIZED);
@@ -86,9 +85,14 @@ public class RegistrationController {
     //get logged in user
     @GetMapping("/user")
     public ResponseEntity<Map<String, Object>> getLoggedUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String loggedUsername = auth.getName();
-        return customResponse.HandleResponse(true, null, userService.findUserByUsername(loggedUsername), HttpStatus.OK);
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String loggedUsername = auth.getName();
+            User u = userService.findUserByUsername(loggedUsername);
+            return customResponse.HandleResponse(true, null, u, HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
+        }
     }
 
     //get logged in user id
