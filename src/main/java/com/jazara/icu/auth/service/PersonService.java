@@ -21,6 +21,7 @@ public class PersonService {
 
     public Person createPerson(Person person) {
         person.setOwner(userService.getUserByID(userService.getLoggedUserId()).get());
+        person.setDetectedBycamId(0L);
         return personRepository.save(person);
     }
 
