@@ -21,6 +21,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -54,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity.cors().and()
+        httpSecurity.cors(withDefaults())
                 .sessionManagement().sessionCreationPolicy( SessionCreationPolicy.STATELESS ).and()
                 .exceptionHandling().authenticationEntryPoint( jwtAuthenticationEntryPoint ).and()
                 .authorizeRequests().antMatchers("/","/webjars/**","/swagger-resources/**","/v2/**","/swagger-ui/**","/swagger-ui.html","/actuator/**", "/registration/**", "/index.html", "/app/**","/api/cam/getAll","/api/auth/**", "/favicon.ico", "/actuator/**", "/metrics/**").permitAll()
