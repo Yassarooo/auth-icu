@@ -37,7 +37,7 @@ public class AiService {
             Person p = new Person();
             if (checkedPerson == null) {
                 p.setAge(0);
-                p.setCam(cam.get());
+                p.setDetectedBycamId(cam.get().getId());
                 p.setName("Unknown");
                 p.setGender(User.Gender.Other);
                 p.setOwner(null);
@@ -47,7 +47,7 @@ public class AiService {
                 addedPersons.add(p);
             } else {
                 checkedPerson.setFaceFeatures(face);
-                checkedPerson.setCam(cam.get());
+                checkedPerson.setDetectedBycamId(cam.get().getId());
                 personService.editPerson(checkedPerson);
                 personService.updateAttendanceHistory(checkedPerson);
             }
