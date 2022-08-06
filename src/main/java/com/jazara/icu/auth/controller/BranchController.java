@@ -49,7 +49,7 @@ public class BranchController {
     }
 
     @GetMapping(value = "/allcams")
-    public ResponseEntity<Map<String, Object>> getBranchCams(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> getBranchCams(@RequestParam Long id) {
         Map<String, Object> tokenMap = new HashMap<String, Object>();
         try {
             List<Cam> camList = branchService.getBranchCams(id);

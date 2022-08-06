@@ -229,9 +229,9 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public User updateTokenForUser(String email, String appToken, String devId) throws Exception {
+    public User updateTokenForUser(String appToken, String devId) throws Exception {
         try {
-            User u = findUserByUsername(email);
+            User u = getLoggedUser();
             Map<String, String> map = u.getDevIdToToken();
             map.put(devId, appToken);
             u.setDevIdToToken(map);

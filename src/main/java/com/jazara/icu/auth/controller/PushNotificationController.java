@@ -48,9 +48,9 @@ public class PushNotificationController {
     }
 
     @PostMapping("/updateToken")
-    public ResponseEntity<Map<String, Object>> updateTokenForUser(@RequestHeader String usernameOrEmail, @RequestHeader String appToken, @RequestHeader String devId) {
+    public ResponseEntity<Map<String, Object>> updateTokenForUser(@RequestHeader String appToken, @RequestHeader String devId) {
         try {
-            User u = userService.updateTokenForUser(usernameOrEmail, appToken, devId);
+            User u = userService.updateTokenForUser( appToken, devId);
             return customResponse.HandleResponse(true, null, u, HttpStatus.OK);
         } catch (Exception e) {
             return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
