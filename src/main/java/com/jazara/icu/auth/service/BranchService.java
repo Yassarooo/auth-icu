@@ -1,6 +1,7 @@
 package com.jazara.icu.auth.service;
 
 import com.jazara.icu.auth.domain.Branch;
+import com.jazara.icu.auth.domain.Cam;
 import com.jazara.icu.auth.repository.BranchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,6 +23,9 @@ public class BranchService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CamService camService;
 
     public Branch createBranch(Branch branch) {
         branch.setOwner(userService.getUserByID(userService.getLoggedUserId()).get());
@@ -51,6 +56,20 @@ public class BranchService {
 
     public Optional<Branch> getBranchById(Long id) {
         return branchRepository.findById(id);
+    }
+
+    public List<Cam> getBranchCams(Long id) throws Exception {
+        Optional<Branch> b = getBranchById(id);
+        if (!b.isPresent())
+            throw new Exception("Branch not found");
+        List<Cam> newCams = new ArrayList<Cam>();
+        List<Cam> cams = camService.getAllCams();
+        for (Cam cam : cams) {
+            if (cam.getRoom().getDep().getBranch().getId() == b.get().getId()) {
+                newCams.add(cam);
+            }
+        }
+        return newCams;
     }
 
     public Boolean deleteBranchById(Long id) {

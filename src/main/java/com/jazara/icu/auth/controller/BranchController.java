@@ -1,6 +1,7 @@
 package com.jazara.icu.auth.controller;
 
 import com.jazara.icu.auth.domain.Branch;
+import com.jazara.icu.auth.domain.Cam;
 import com.jazara.icu.auth.service.BranchService;
 import com.jazara.icu.auth.service.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RequestMapping("/api/branch")
 @RestController
@@ -48,6 +46,18 @@ public class BranchController {
         final ArrayList<Branch> branches = branchService.getBranchesByOwnerId(id);
         tokenMap.put("branches", branches);
         return customResponse.HandleResponse(true, null, tokenMap, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/allcams")
+    public ResponseEntity<Map<String, Object>> getBranchCams(@PathVariable Long id) {
+        Map<String, Object> tokenMap = new HashMap<String, Object>();
+        try {
+            List<Cam> camList = branchService.getBranchCams(id);
+            tokenMap.put("cams", camList);
+            return customResponse.HandleResponse(true, null, tokenMap, HttpStatus.OK);
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/{id}")
