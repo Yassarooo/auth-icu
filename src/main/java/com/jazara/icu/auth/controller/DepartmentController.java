@@ -33,13 +33,16 @@ public class DepartmentController {
         return customResponse.HandleResponse(true, null, d, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/edit/{id}")
-    public ResponseEntity<?> editDep(@PathVariable Long id, @RequestBody Department dep) {
-        Department d = departmentService.editDepartment(dep);
-        if (d == null) {
-            return customResponse.HandleResponse(false, "cannot edit department", null, HttpStatus.OK);
+    @PutMapping(value = "/edit")
+    public ResponseEntity<?> editDep(@RequestBody Department dep) {
+        try {
+            Department d = departmentService.editDepartment(dep);
+            return customResponse.HandleResponse(true, null, d, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return customResponse.HandleResponse(false, e.getMessage(), null, HttpStatus.OK);
+
         }
-        return customResponse.HandleResponse(true, null, d, HttpStatus.OK);
     }
 
     @GetMapping(value = "/all/{id}")

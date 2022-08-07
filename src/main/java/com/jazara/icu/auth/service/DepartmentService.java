@@ -45,7 +45,7 @@ public class DepartmentService {
             if (temp.getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin()) {
                 Optional<Department> d = departmentRepository.findById(dep.getId());
                 if (!d.isPresent())
-                    return null;
+                    throw new Exception("Dep not Found")
                 Department tmp = d.get();
                 tmp.setName(dep.getName());
                 tmp.setLocation(dep.getLocation());
