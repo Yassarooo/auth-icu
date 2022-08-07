@@ -37,8 +37,8 @@ public class CamController {
         }
     }
 
-    @PutMapping(value = "/edit/{id}")
-    public ResponseEntity<Map<String, Object>> editCam(@PathVariable Long id, @RequestBody Cam cam) {
+    @PutMapping(value = "/edit")
+    public ResponseEntity<Map<String, Object>> editCam(@RequestBody Cam cam) {
         try {
             Cam c = camService.editCam(cam);
             return customResponse.HandleResponse(true, null, c, HttpStatus.OK);

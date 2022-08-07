@@ -62,6 +62,7 @@ public class CamService {
             temp.setUrl(cam.getUrl());
             temp.setRoom_id(cam.getRoom_id());
             temp.setRoom(r.get());
+            temp.setPersons(cam.getPersons());
             camRepository.save(temp);
             return temp;
         }

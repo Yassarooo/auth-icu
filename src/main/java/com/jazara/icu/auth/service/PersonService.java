@@ -36,6 +36,9 @@ public class PersonService {
             temp.setPosition(person.getPosition());
             temp.setPhonenumber(person.getPhonenumber());
             temp.setDob(person.getDob());
+            temp.setDetectedBycamId(person.getDetectedBycamId());
+            temp.setFaceFeatures(person.getFaceFeatures());
+            temp.setAttendancehistory(person.getAttendancehistory());
             personRepository.save(temp);
             return temp;
         }
