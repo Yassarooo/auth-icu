@@ -38,14 +38,14 @@ public class DepartmentService {
     }
 
     @Transactional
-    public Department editDepartment(Department dep) {
+    public Department editDepartment(Department dep) throws Exception {
         Optional<Branch> b = branchService.getBranchById(dep.getBranch_id());
         if (b.isPresent()) {
             Branch temp = b.get();
             if (temp.getOwner().getId().equals(userService.getLoggedUserId()) || userService.isAdmin()) {
                 Optional<Department> d = departmentRepository.findById(dep.getId());
                 if (!d.isPresent())
-                    throw new Exception("Dep not Found")
+                    throw new Exception("Dep not Found");
                 Department tmp = d.get();
                 tmp.setName(dep.getName());
                 tmp.setLocation(dep.getLocation());
@@ -56,7 +56,7 @@ public class DepartmentService {
 
             }
         }
-        return null;
+        throw new Exception("Branch not Found");
     }
 
     public Branch getBranchByDepId(Long id) {
